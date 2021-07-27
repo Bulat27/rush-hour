@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.Duration;
 import java.util.Set;
 
-@Entity
+@Entity(name = "activities")
 public class Activity {
 
     @Id

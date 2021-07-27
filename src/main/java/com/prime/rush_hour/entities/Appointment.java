@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-@Entity
+@Entity(name = "appointments")
 public class Appointment {
 
     @Id
@@ -21,7 +21,7 @@ public class Appointment {
     private User user;
 
     @ManyToMany
-    @JoinTable(name = "appointment_activities",
+    @JoinTable(name = "appointments_activities",
                joinColumns = @JoinColumn(name = "appointment_id"),
                inverseJoinColumns = @JoinColumn(name = "activity_id"))
     private Set<Activity> activities;

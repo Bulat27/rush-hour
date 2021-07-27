@@ -3,7 +3,7 @@ package com.prime.rush_hour.entities;
 import javax.persistence.*;
 import java.util.Set;
 
-@Entity
+@Entity(name = "roles")
 public class Role {
 
     @Id

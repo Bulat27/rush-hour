@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
-@Entity
+@Entity(name = "users")
 public class User {
 
     @Id
@@ -25,7 +25,7 @@ public class User {
 
     //TODO: Mozda moras da instanciras ovo!
     @ManyToMany
-    @JoinTable(name = "user_role",
+    @JoinTable(name = "users_roles",
                joinColumns = @JoinColumn(name = "user_id"),
                inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles;
