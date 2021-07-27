@@ -10,7 +10,8 @@ public interface UserService {
 
     //TODO: Vidi za RecordNotFoundException
     List<User> getAllUsers();
-    User getUserById();
-    User createOrUpdateUser(User user);
-    void deleteUserById();
+    User getUserById(Integer id) throws  RuntimeException;
+    User createUser(User user);
+    void deleteUserById(Integer Id) throws RuntimeException;
+    User updateUser (Integer id, User newUser) throws RuntimeException;
 }

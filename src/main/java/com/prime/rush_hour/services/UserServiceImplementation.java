@@ -25,34 +25,54 @@ public class UserServiceImplementation implements  UserService{
     }
 
     @Override
-    public User getUserById() {
-        return null;
+    public User getUserById(Integer id) throws RuntimeException{
+        Optional<User> user = userRepository.findById(id);
+
+        if(user.isPresent()) return user.get();
+        throw new RuntimeException("The user record with the specified id doesn't exist");
     }
 
     @Override
-    public User createOrUpdateUser(User user) {
-        Optional<User> existingUser = userRepository.findById(user.getId());
-
-        if(existingUser.isPresent()){
-            User updatedUser = getUpdatedUser(existingUser, user);
-            return userRepository.save(updatedUser);
-        }
+    public User createUser(User user) {
+//        Optional<User> existingUser = userRepository.findById(user.getId());
+//
+//        if(existingUser.isPresent()){
+//            User updatedUser = getUpdatedUser(existingUser, user);
+//            return userRepository.save(updatedUser);
+//        }
         return userRepository.save(user);
     }
 
-    private User getUpdatedUser(Optional<User> existingUser, User user) {
+    @Override
+    public User updateUser(Integer id, User newUser) throws RuntimeException {
+        Optional<User> existingUser = userRepository.findById(id);
+
+        if(existingUser.isPresent()){
+            User updatedUser = getUpdatedUser(existingUser, newUser);
+            return userRepository.save(updatedUser);
+        }
+        //TODO: Izvuci ovo kao konstantu(ako bude trebalo)
+        throw new RuntimeException("The user record with the specified id doesn't exist");
+    }
+
+    private User getUpdatedUser(Optional<User> existingUser, User newUser) {
         User updatedUser = existingUser.get();
-        updatedUser.setFirstName(user.getFirstName());
-        updatedUser.setLastName(user.getLastName());
-        updatedUser.setEmail(user.getEmail());
-        updatedUser.setPassword(user.getPassword());
-        updatedUser.setRoles(user.getRoles());
-        updatedUser.setAppointments(user.getAppointments());
+        updatedUser.setFirstName(newUser.getFirstName());
+        updatedUser.setLastName(newUser.getLastName());
+        updatedUser.setEmail(newUser.getEmail());
+        updatedUser.setPassword(newUser.getPassword());
+        updatedUser.setRoles(newUser.getRoles());
+        updatedUser.setAppointments(newUser.getAppointments());
         return updatedUser;
     }
 
     @Override
-    public void deleteUserById() {
+    public void deleteUserById(Integer id) throws RuntimeException {
+        Optional<User> user = userRepository.findById(id);
 
+        if(user.isPresent())
+            userRepository.deleteById(id);
+        else
+            throw new RuntimeException("The user record with the specified id doesn't exist");
     }
 }

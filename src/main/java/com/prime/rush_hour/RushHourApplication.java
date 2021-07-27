@@ -7,7 +7,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class RushHourApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(RushHourApplication.class, args);
+
+        try {
+            SpringApplication.run(RushHourApplication.class, args);
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+        }
     }
 
 }
