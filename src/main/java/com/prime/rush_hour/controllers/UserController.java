@@ -1,7 +1,11 @@
 package com.prime.rush_hour.controllers;
 
 import com.prime.rush_hour.entities.User;
+import com.prime.rush_hour.mapstruct.dtos.UserGetDto;
+import com.prime.rush_hour.mapstruct.mappers.MapStructMapper;
+import com.prime.rush_hour.repositories.UserRepository;
 import com.prime.rush_hour.services.UserService;
+import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,20 +20,26 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
+    private MapStructMapper mapStructMapper;
 
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
     }
 
+    @Autowired
+    public void setMapStructMapper(MapStructMapper mapStructMapper) {
+        this.mapStructMapper = mapStructMapper;
+    }
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers(){
-        return new ResponseEntity<List<User>>(userService.getAllUsers(),new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getAllUsers(),new HttpHeaders(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
-        return new ResponseEntity<User>(userService.getUserById(id), new HttpHeaders(), HttpStatus.OK);
+    public ResponseEntity<UserGetDto> getUserById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(mapStructMapper.userToUserGetDto(userService.getUserById(id)), new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping
@@ -47,5 +57,4 @@ public class UserController {
             userService.deleteUserById(id);
             return new ResponseEntity(String.format("User with the id %d successfully deleted", id), HttpStatus.OK);
     }
-
 }
