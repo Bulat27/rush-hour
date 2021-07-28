@@ -2,10 +2,8 @@ package com.prime.rush_hour.controllers;
 
 import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.mapstruct.dtos.UserGetDto;
-import com.prime.rush_hour.mapstruct.mappers.MapStructMapper;
-import com.prime.rush_hour.repositories.UserRepository;
+import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.services.UserService;
-import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,7 +18,7 @@ import java.util.List;
 public class UserController {
 
     private UserService userService;
-    private MapStructMapper mapStructMapper;
+    private UserMapper userMapper;
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -28,18 +26,20 @@ public class UserController {
     }
 
     @Autowired
-    public void setMapStructMapper(MapStructMapper mapStructMapper) {
-        this.mapStructMapper = mapStructMapper;
+    public void setMapStructMapper(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getAllUsers(){
-        return new ResponseEntity<>(userService.getAllUsers(),new HttpHeaders(), HttpStatus.OK);
+    public ResponseEntity<List<UserGetDto>> getAllUsers(){
+//        return new ResponseEntity<>(userService.getAllUsers(),new HttpHeaders(), HttpStatus.OK);
+        return ResponseEntity.ok(userMapper.usersToUserGetDtos(userService.getAllUsers()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserGetDto> getUserById(@PathVariable("id") Integer id) {
-        return new ResponseEntity<>(mapStructMapper.userToUserGetDto(userService.getUserById(id)), new HttpHeaders(), HttpStatus.OK);
+//        return new ResponseEntity<>(userMapper.userToUserGetDto(userService.getUserById(id)), new HttpHeaders(), HttpStatus.OK);
+        return ResponseEntity.ok(userMapper.userToUserGetDto(userService.getUserById(id)));
     }
 
     @PostMapping
