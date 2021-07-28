@@ -3,6 +3,7 @@ package com.prime.rush_hour.mapstruct.dtos;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class UserPostDto {
@@ -21,6 +22,7 @@ public class UserPostDto {
     //TODO: Implement the email validation (just annotation). It will be probably be annotated on the DTO.
     @Column(nullable = false)
     @NotBlank
+    @Email
     private String email;
 
     @Column(nullable = false)
