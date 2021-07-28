@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -28,36 +29,23 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
-        try {
-            return new ResponseEntity<User>(userService.getUserById(id), new HttpHeaders(), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            //TODO: Make a response body!
-            return new ResponseEntity<>(new HttpHeaders(),HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<User>(userService.getUserById(id), new HttpHeaders(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user){
+    public ResponseEntity<User> createUser(@RequestBody @Valid User user){
         return new ResponseEntity<User>(userService.createUser(user), new HttpHeaders(), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody User user){
-        try {
-            return new ResponseEntity<User>(userService.updateUser(id, user), new HttpHeaders(), HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user){
+        return new ResponseEntity<User>(userService.updateUser(id, user), new HttpHeaders(), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUserById(@PathVariable("id") Integer id){
-        try {
             userService.deleteUserById(id);
-            return new ResponseEntity(HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
+            return new ResponseEntity(String.format("User with the id %d successfully deleted", id), HttpStatus.OK);
     }
 
 }

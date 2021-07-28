@@ -1,5 +1,7 @@
 package com.prime.rush_hour.services;
 
+import com.prime.rush_hour.exception_handling.NoDataFoundException;
+import com.prime.rush_hour.exception_handling.UserNotFoundException;
 import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImplementation implements  UserService{
+public class UserServiceImplementation implements UserService{
 
     private UserRepository userRepository;
 
@@ -18,18 +20,19 @@ public class UserServiceImplementation implements  UserService{
         this.userRepository = userRepository;
     }
 
-    //TODO: Vidi dal je neophodno ovako il ce svj da vrati praznu listu
     @Override
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        List<User> allUsers = userRepository.findAll();
+        if(allUsers.isEmpty()) throw new NoDataFoundException();
+        return allUsers;
     }
 
     @Override
-    public User getUserById(Integer id) throws RuntimeException{
+    public User getUserById(Integer id) {
         Optional<User> user = userRepository.findById(id);
-
+        //TODO: Obrni logiku
         if(user.isPresent()) return user.get();
-        throw new RuntimeException("The user record with the specified id doesn't exist");
+        throw new UserNotFoundException(id);
     }
 
     @Override
@@ -44,7 +47,7 @@ public class UserServiceImplementation implements  UserService{
     }
 
     @Override
-    public User updateUser(Integer id, User newUser) throws RuntimeException {
+    public User updateUser(Integer id, User newUser){
         Optional<User> existingUser = userRepository.findById(id);
 
         if(existingUser.isPresent()){
@@ -52,7 +55,7 @@ public class UserServiceImplementation implements  UserService{
             return userRepository.save(updatedUser);
         }
         //TODO: Izvuci ovo kao konstantu(ako bude trebalo)
-        throw new RuntimeException("The user record with the specified id doesn't exist");
+        throw new UserNotFoundException(id);
     }
 
     private User getUpdatedUser(Optional<User> existingUser, User newUser) {
@@ -65,12 +68,12 @@ public class UserServiceImplementation implements  UserService{
     }
 
     @Override
-    public void deleteUserById(Integer id) throws RuntimeException {
+    public void deleteUserById(Integer id) {
         Optional<User> user = userRepository.findById(id);
 
         if(user.isPresent())
             userRepository.deleteById(id);
         else
-            throw new RuntimeException("The user record with the specified id doesn't exist");
+            throw new UserNotFoundException(id);
     }
 }

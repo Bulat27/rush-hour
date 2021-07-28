@@ -1,6 +1,7 @@
 package com.prime.rush_hour.entities;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity(name = "users")
 public class User {
@@ -10,15 +11,19 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
+    @NotNull
     private String firstName;
 
     @Column(nullable = false)
+    @NotNull
     private String lastName;
 
     @Column(nullable = false)
+    @NotNull
     private String email;
 
     @Column(nullable = false)
+    @NotNull
     private String password;
 
 
