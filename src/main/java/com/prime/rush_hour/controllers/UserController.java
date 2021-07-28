@@ -1,12 +1,10 @@
 package com.prime.rush_hour.controllers;
 
-import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.mapstruct.dtos.UserGetDto;
+import com.prime.rush_hour.mapstruct.dtos.UserPostDto;
 import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -48,8 +46,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable("id") Integer id, @RequestBody @Valid User user){
-        return new ResponseEntity<User>(userService.updateUser(id, user), new HttpHeaders(), HttpStatus.OK);
+    public ResponseEntity updateUser(@PathVariable("id") Integer id, @RequestBody @Valid UserPostDto userPostDto){
+        userService.updateUser(id, userMapper.userPostDtoToUser(userPostDto));
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}")
