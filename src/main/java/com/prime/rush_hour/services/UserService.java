@@ -1,6 +1,7 @@
 package com.prime.rush_hour.services;
 
-import com.prime.rush_hour.entities.User;
+import com.prime.rush_hour.dtos.UserGetDto;
+import com.prime.rush_hour.dtos.UserPostDto;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -8,9 +9,9 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    List<User> get();
-    User get(Integer id);
-    User create(User user);
+    List<UserGetDto> get();
+    UserGetDto get(Integer id);
+    UserGetDto create(UserPostDto userPostDto);
     void delete(Integer Id);
-    User update(Integer id, User newUser);
+    void update(Integer id, UserPostDto userPostDto);
 }
