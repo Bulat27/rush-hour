@@ -1,5 +1,6 @@
 package com.prime.rush_hour.controllers;
 
+import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.mapstruct.dtos.UserGetDto;
 import com.prime.rush_hour.mapstruct.dtos.UserPostDto;
 import com.prime.rush_hour.mapstruct.mappers.UserMapper;

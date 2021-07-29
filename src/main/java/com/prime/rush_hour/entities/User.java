@@ -1,8 +1,6 @@
 package com.prime.rush_hour.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 @Entity(name = "users")
 public class User {
@@ -12,20 +10,15 @@ public class User {
     private Integer id;
 
     @Column(nullable = false)
-    @NotBlank
     private String firstName;
 
     @Column(nullable = false)
-    @NotBlank
     private String lastName;
-    //TODO: Implement the email validation (just annotation). It will be probably be annotated on the DTO. Do I need the validation here too?
+
     @Column(nullable = false)
-    @NotBlank
-    @Email
     private String email;
 
     @Column(nullable = false)
-    @NotBlank
     private String password;
 
 
