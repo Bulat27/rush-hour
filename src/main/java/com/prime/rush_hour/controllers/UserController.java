@@ -1,8 +1,8 @@
 package com.prime.rush_hour.controllers;
 
 import com.prime.rush_hour.entities.User;
-import com.prime.rush_hour.mapstruct.dtos.UserGetDto;
-import com.prime.rush_hour.mapstruct.dtos.UserPostDto;
+import com.prime.rush_hour.dtos.UserGetDto;
+import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +14,40 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Controller
+@RequestMapping("/api/v1/users")
 public class UserController {
 
     private UserService userService;
     private UserMapper userMapper;
+
+    @GetMapping
+    public ResponseEntity<List<UserGetDto>> get(){
+        return ResponseEntity.ok(userMapper.usersToUserGetDtos(userService.get()));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserGetDto> get(@PathVariable("id") Integer id) {
+        return ResponseEntity.ok(userMapper.userToUserGetDto(userService.get(id)));
+    }
+
+    @PostMapping
+    public ResponseEntity<UserGetDto> create(@RequestBody @Valid UserPostDto userPostDto){
+        User user = userMapper.userPostDtoToUser(userPostDto);
+        userService.create(user);
+        return ResponseEntity.ok(userMapper.userToUserGetDto(user));
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") Integer id, @RequestBody @Valid UserPostDto userPostDto){
+        userService.update(id, userMapper.userPostDtoToUser(userPostDto));
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+            userService.delete(id);
+            return ResponseEntity.ok().build();
+    }
 
     @Autowired
     public void setUserService(UserService userService) {
@@ -27,34 +57,5 @@ public class UserController {
     @Autowired
     public void setMapStructMapper(UserMapper userMapper) {
         this.userMapper = userMapper;
-    }
-
-    @GetMapping
-    public ResponseEntity<List<UserGetDto>> getAllUsers(){
-        return ResponseEntity.ok(userMapper.usersToUserGetDtos(userService.getAllUsers()));
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<UserGetDto> getUserById(@PathVariable("id") Integer id) {
-        return ResponseEntity.ok(userMapper.userToUserGetDto(userService.getUserById(id)));
-    }
-
-    @PostMapping
-    public ResponseEntity<UserGetDto> createUser(@RequestBody @Valid UserPostDto userPostDto){
-        User user = userMapper.userPostDtoToUser(userPostDto);
-        userService.createUser(user);
-        return ResponseEntity.ok(userMapper.userToUserGetDto(user));
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity updateUser(@PathVariable("id") Integer id, @RequestBody @Valid UserPostDto userPostDto){
-        userService.updateUser(id, userMapper.userPostDtoToUser(userPostDto));
-        return ResponseEntity.ok().build();
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity deleteUserById(@PathVariable("id") Integer id){
-            userService.deleteUserById(id);
-            return ResponseEntity.ok().build();
     }
 }

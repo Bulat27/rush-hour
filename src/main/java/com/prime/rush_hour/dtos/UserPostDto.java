@@ -1,4 +1,4 @@
-package com.prime.rush_hour.mapstruct.dtos;
+package com.prime.rush_hour.dtos;
 
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;

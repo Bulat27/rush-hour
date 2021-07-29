@@ -1,8 +1,8 @@
 package com.prime.rush_hour.mapstruct.mappers;
 
 import com.prime.rush_hour.entities.User;
-import com.prime.rush_hour.mapstruct.dtos.UserGetDto;
-import com.prime.rush_hour.mapstruct.dtos.UserPostDto;
+import com.prime.rush_hour.dtos.UserGetDto;
+import com.prime.rush_hour.dtos.UserPostDto;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 

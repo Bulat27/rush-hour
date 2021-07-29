@@ -11,24 +11,19 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class UserServiceImplementation implements UserService{
+public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
 
-    @Autowired
-    public void setUserRepository(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
     @Override
-    public List<User> getAllUsers() {
+    public List<User> get() {
         List<User> allUsers = userRepository.findAll();
         if(allUsers.isEmpty()) throw new NoDataFoundException();
         return allUsers;
     }
 
     @Override
-    public User getUserById(Integer id) {
+    public User get(Integer id) {
         Optional<User> user = userRepository.findById(id);
 
         if(user.isPresent()) return user.get();
@@ -36,22 +31,22 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public User createUser(User user) {
+    public User create(User user) {
         return userRepository.save(user);
     }
 
     @Override
-    public User updateUser(Integer id, User newUser){
+    public User update(Integer id, User newUser){
         Optional<User> existingUser = userRepository.findById(id);
 
         if(existingUser.isPresent()){
-            User updatedUser = getUpdatedUser(existingUser, newUser);
+            User updatedUser = getUpdated(existingUser, newUser);
             return userRepository.save(updatedUser);
         }
         throw new UserNotFoundException(id);
     }
 
-    private User getUpdatedUser(Optional<User> existingUser, User newUser) {
+    private User getUpdated(Optional<User> existingUser, User newUser) {
         User updatedUser = existingUser.get();
         updatedUser.setFirstName(newUser.getFirstName());
         updatedUser.setLastName(newUser.getLastName());
@@ -61,12 +56,17 @@ public class UserServiceImplementation implements UserService{
     }
 
     @Override
-    public void deleteUserById(Integer id) {
+    public void delete(Integer id) {
         Optional<User> user = userRepository.findById(id);
 
         if(user.isPresent())
             userRepository.deleteById(id);
         else
             throw new UserNotFoundException(id);
+    }
+
+    @Autowired
+    public void setUserRepository(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }

@@ -8,9 +8,9 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    List<User> getAllUsers();
-    User getUserById(Integer id);
-    User createUser(User user);
-    void deleteUserById(Integer Id);
-    User updateUser (Integer id, User newUser);
+    List<User> get();
+    User get(Integer id);
+    User create(User user);
+    void delete(Integer Id);
+    User update(Integer id, User newUser);
 }
