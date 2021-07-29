@@ -40,8 +40,10 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody @Valid User user){
-        return new ResponseEntity<User>(userService.createUser(user), new HttpHeaders(), HttpStatus.OK);
+    public ResponseEntity<UserGetDto> createUser(@RequestBody @Valid UserPostDto userPostDto){
+        User user = userMapper.userPostDtoToUser(userPostDto);
+        userService.createUser(user);
+        return ResponseEntity.ok(userMapper.userToUserGetDto(user));
     }
 
     @PutMapping("/{id}")
@@ -53,6 +55,6 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity deleteUserById(@PathVariable("id") Integer id){
             userService.deleteUserById(id);
-            return new ResponseEntity(String.format("User with the id %d successfully deleted", id), HttpStatus.OK);
+            return ResponseEntity.ok().build();
     }
 }
