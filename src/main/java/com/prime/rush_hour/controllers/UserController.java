@@ -30,13 +30,11 @@ public class UserController {
 
     @GetMapping
     public ResponseEntity<List<UserGetDto>> getAllUsers(){
-//        return new ResponseEntity<>(userService.getAllUsers(),new HttpHeaders(), HttpStatus.OK);
         return ResponseEntity.ok(userMapper.usersToUserGetDtos(userService.getAllUsers()));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserGetDto> getUserById(@PathVariable("id") Integer id) {
-//        return new ResponseEntity<>(userMapper.userToUserGetDto(userService.getUserById(id)), new HttpHeaders(), HttpStatus.OK);
         return ResponseEntity.ok(userMapper.userToUserGetDto(userService.getUserById(id)));
     }
 

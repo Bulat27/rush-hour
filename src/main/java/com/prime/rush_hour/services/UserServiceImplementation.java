@@ -30,19 +30,13 @@ public class UserServiceImplementation implements UserService{
     @Override
     public User getUserById(Integer id) {
         Optional<User> user = userRepository.findById(id);
-        //TODO: Obrni logiku
+
         if(user.isPresent()) return user.get();
         throw new UserNotFoundException(id);
     }
 
     @Override
     public User createUser(User user) {
-//        Optional<User> existingUser = userRepository.findById(user.getId());
-//
-//        if(existingUser.isPresent()){
-//            User updatedUser = getUpdatedUser(existingUser, user);
-//            return userRepository.save(updatedUser);
-//        }
         return userRepository.save(user);
     }
 
@@ -54,7 +48,6 @@ public class UserServiceImplementation implements UserService{
             User updatedUser = getUpdatedUser(existingUser, newUser);
             return userRepository.save(updatedUser);
         }
-        //TODO: Izvuci ovo kao konstantu(ako bude trebalo)
         throw new UserNotFoundException(id);
     }
 

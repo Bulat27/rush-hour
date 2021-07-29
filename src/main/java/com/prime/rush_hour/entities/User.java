@@ -3,7 +3,6 @@ package com.prime.rush_hour.entities;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity(name = "users")
 public class User {
