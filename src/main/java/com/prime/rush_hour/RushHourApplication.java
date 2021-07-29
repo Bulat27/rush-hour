@@ -14,5 +14,4 @@ public class RushHourApplication {
             e.printStackTrace();
         }
     }
-
 }
