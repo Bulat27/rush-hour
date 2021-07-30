@@ -9,5 +9,4 @@ public class RushHourApplication {
     public static void main(String[] args) {
         SpringApplication.run(RushHourApplication.class, args);
     }
-
 }
