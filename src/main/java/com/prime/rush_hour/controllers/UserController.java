@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserGetDto> get(@PathVariable("id") Integer id) {
+    public ResponseEntity<UserGetDto> get(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.get(id));
     }
 
@@ -34,13 +34,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") Integer id, @RequestBody @Valid UserPutDto userPutDto){
-        userService.update(id, userPutDto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserGetDto> update(@PathVariable Integer id, @RequestBody @Valid UserPutDto userPutDto){
+        return ResponseEntity.ok(userService.update(id, userPutDto));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable("id") Integer id){
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
             userService.delete(id);
             return ResponseEntity.ok().build();
     }

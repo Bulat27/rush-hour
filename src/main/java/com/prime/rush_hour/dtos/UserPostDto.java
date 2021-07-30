@@ -1,6 +1,5 @@
 package com.prime.rush_hour.dtos;
 
-import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
@@ -12,20 +11,16 @@ public class UserPostDto {
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false)
     @NotBlank
     private String firstName;
 
-    @Column(nullable = false)
     @NotBlank
     private String lastName;
 
-    @Column(nullable = false)
     @NotBlank
     @Email
     private String email;
 
-    @Column(nullable = false)
     @NotBlank
     private String password;
 

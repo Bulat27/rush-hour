@@ -1,26 +1,14 @@
 package com.prime.rush_hour.dtos;
 
-import javax.persistence.Column;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
 
 public class UserPutDto {
 
-    @Column(nullable = false)
-    @NotBlank
+
     private String firstName;
-
-    @Column(nullable = false)
-    @NotBlank
     private String lastName;
-
-    @Column(nullable = false)
-    @NotBlank
     @Email
     private String email;
-
-    @Column(nullable = false)
-    @NotBlank
     private String password;
 
 

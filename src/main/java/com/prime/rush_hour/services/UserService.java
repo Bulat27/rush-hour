@@ -14,5 +14,5 @@ public interface UserService {
     UserGetDto get(Integer id);
     UserGetDto create(UserPostDto userPostDto);
     void delete(Integer Id);
-    void update(Integer id, UserPutDto userPutDtoDtoDto);
+    UserGetDto update(Integer id, UserPutDto userPutDtoDtoDto);
 }

@@ -37,12 +37,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void update(Integer id, UserPutDto userPutDto){
-        if(!userRepository.existsById(id)) throw new UserNotFoundException(id);
-
-        User user = userMapper.userPutDtoToUser(userPutDto);
-        user.setId(id);
+    public UserGetDto update(Integer id, UserPutDto userPutDto){
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        userMapper.update(userPutDto, user);
         userRepository.save(user);
+        return userMapper.userToUserGetDto(user);
     }
 
     @Override
