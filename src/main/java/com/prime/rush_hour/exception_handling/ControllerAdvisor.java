@@ -22,6 +22,4 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         String body = "Arguments are not valid.";
         return new ResponseEntity<>(body, HttpStatus.BAD_REQUEST);
     }
-
-
 }

@@ -2,6 +2,7 @@ package com.prime.rush_hour.controllers;
 
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
+import com.prime.rush_hour.dtos.UserPutDto;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,8 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Void> update(@PathVariable("id") Integer id, @RequestBody @Valid UserPostDto userPostDto){
-        userService.update(id, userPostDto);
+    public ResponseEntity<Void> update(@PathVariable("id") Integer id, @RequestBody @Valid UserPutDto userPutDto){
+        userService.update(id, userPutDto);
         return ResponseEntity.ok().build();
     }
 
