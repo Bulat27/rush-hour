@@ -17,6 +17,5 @@ public interface UserMapper {
     UserGetDto userToUserGetDto(User user);
     User userPostDtoToUser(UserPostDto userPostDto);
     List<UserGetDto> usersToUserGetDtos(List<User> users);
-    User userPutDtoToUser(UserPutDto userPutDto);
     void update(UserPutDto userPutDto, @MappingTarget User user);
 }
