@@ -23,17 +23,25 @@ import java.util.stream.Collectors;
 
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
+    private final SecretKey secretKey;
+    private final JwtConfig jwtConfig;
+
+    public JwtTokenVerifier(SecretKey secretKey, JwtConfig jwtConfig) {
+        this.secretKey = secretKey;
+        this.jwtConfig = jwtConfig;
+    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String authorizationHeader  = request.getHeader("Authorization");
+        String authorizationHeader  = request.getHeader(jwtConfig.getAuthorizationHeader());
         //TODO: Nisam uspeo da nadjem tu neku biblioteku koju je on koristio
         //TODO: Zasto je ovako uradio?
-        if(authorizationHeader == null || authorizationHeader.isEmpty() || !authorizationHeader.startsWith("Bearer ")){
+        if(authorizationHeader == null || authorizationHeader.isEmpty() || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())){
             filterChain.doFilter(request, response);
             return;
         }
 
-        String token=authorizationHeader.replace("Bearer ","");
+        String token= authorizationHeader.replace(jwtConfig.getTokenPrefix(), "");
 
         try {
 
@@ -42,10 +50,10 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 //            String secretString = Encoders.BASE64.encode(key.getEncoded());
 
             //TODO: Izmenio sam jer je onda metoda zastarela, vidi dal ce to da ga jebe
-            String secretKey = "ovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratkoovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratko";
+            //String secretKey = "ovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratkoovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratko";
             Jws<Claims> claimsJws = Jwts
                                     .parser()
-                                    .setSigningKey((Keys.hmacShaKeyFor(secretKey.getBytes())))
+                                    .setSigningKey(secretKey)
                                     .parseClaimsJws(token);
 
             Claims body = claimsJws.getBody();

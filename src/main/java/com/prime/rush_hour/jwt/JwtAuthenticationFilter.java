@@ -23,11 +23,15 @@ import java.util.Date;
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final JwtConfig jwtConfig;
+    private final SecretKey secretKey;
     //TODO: Move this to some config class
 //    public static final String secretKey = Encoders.BASE64.encode(Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded());
 
-    public JwtAuthenticationFilter(AuthenticationManager authenticationManager){
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtConfig jwtConfig, SecretKey secretKey){
         this.authenticationManager = authenticationManager;
+        this.jwtConfig = jwtConfig;
+        this.secretKey= secretKey;
     }
 
     @Override
@@ -48,17 +52,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 //        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
 //        String secretString = Encoders.BASE64.encode(key.getEncoded());
-        String secretKey = "ovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratkoovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratko";
+        //String secretKey = "ovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratkoovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratko";
 
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
                 .setIssuedAt(new Date())
-                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(10)))
-                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes()))
+                .setExpiration(java.sql.Date.valueOf(LocalDate.now().plusDays(jwtConfig.getTokenExpirationAfterDays())))
+                .signWith(secretKey)
                 .compact();
         //TODO: Vidi za ovaj Bearer?
-        response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
 
     }
 }
