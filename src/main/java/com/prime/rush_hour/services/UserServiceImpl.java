@@ -8,6 +8,7 @@ import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public class UserServiceImpl implements UserService{
 
     private UserRepository userRepository;
     private UserMapper userMapper;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public List<UserGetDto> get() {
@@ -32,10 +34,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserGetDto create(UserPostDto userPostDto) {
         User user = userMapper.userPostDtoToUser(userPostDto);
+        //TODO: Implement the logic to prevent the same username(email)
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
     }
 
+    //TODO: Encode the password here too
     @Override
     public UserGetDto update(Integer id, UserPutDto userPutDto){
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
@@ -58,5 +63,10 @@ public class UserServiceImpl implements UserService{
     @Autowired
     public void setUserMapper(UserMapper userMapper) {
         this.userMapper = userMapper;
+    }
+
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
     }
 }
