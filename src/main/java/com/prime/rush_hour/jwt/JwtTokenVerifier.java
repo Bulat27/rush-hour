@@ -68,6 +68,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
 
             //TODO:Preskocicu authorities deo jer ja jos uvek nemam to
 
+            //TODO: Vidi zasto je null za credentials?
             Authentication authentication =  new UsernamePasswordAuthenticationToken(userName, null, simpleGrantedAuthorities);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
