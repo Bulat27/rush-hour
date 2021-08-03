@@ -3,6 +3,7 @@ package com.prime.rush_hour.services;
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
+import com.prime.rush_hour.exception_handling.EmailExistsException;
 import com.prime.rush_hour.exception_handling.UserNotFoundException;
 import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.mapstruct.mappers.UserMapper;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserGetDto create(UserPostDto userPostDto) {
+        if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
         User user = userMapper.userPostDtoToUser(userPostDto);
         //TODO: Implement the logic to prevent the same username(email)
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -41,6 +43,7 @@ public class UserServiceImpl implements UserService{
     }
 
     //TODO: Encode the password here too
+    //TODO: Forbid fields like "  " or something like that. Check out the annotations for it.
     @Override
     public UserGetDto update(Integer id, UserPutDto userPutDto){
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
