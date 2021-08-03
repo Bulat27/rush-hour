@@ -35,9 +35,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserGetDto create(UserPostDto userPostDto) {
         if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
+
         User user = userMapper.userPostDtoToUser(userPostDto);
         //TODO: Implement the logic to prevent the same username(email)
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        encodePassword(user);
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
     }
@@ -47,7 +48,10 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserGetDto update(Integer id, UserPutDto userPutDto){
         User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
+
         userMapper.update(userPutDto, user);
+        encodePassword(user);
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
     }
@@ -56,6 +60,10 @@ public class UserServiceImpl implements UserService{
     public void delete(Integer id) {
         if(!userRepository.existsById(id)) throw new UserNotFoundException(id);
         userRepository.deleteById(id);
+    }
+
+    private void encodePassword(User user){
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
     @Autowired
