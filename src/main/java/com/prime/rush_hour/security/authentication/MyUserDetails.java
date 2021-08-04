@@ -9,7 +9,8 @@ import java.util.Collection;
 
 public class MyUserDetails implements UserDetails {
 
-    private String username;
+    //TODO: Vrati u private
+    public String username;
     private String password;
 //    private final PasswordEncoder passwordEncoder;
 

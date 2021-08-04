@@ -31,8 +31,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserGetDto get(Integer id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+    public UserGetDto get(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         return userMapper.userToUserGetDto(user);
     }
 
@@ -52,7 +52,8 @@ public class UserServiceImpl implements UserService{
     //TODO: Forbid fields like "  " or something like that. Check out the annotations for it.
     @Override
     public UserGetDto update(Integer id, UserPutDto userPutDto){
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+        //TODO:Change this!
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("nanana"));
         if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
 
         userMapper.update(userPutDto, user);
@@ -63,7 +64,8 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void delete(Integer id) {
-        if(!userRepository.existsById(id)) throw new UserNotFoundException(id);
+        //TODO:Change this!
+        if(!userRepository.existsById(id)) throw new UserNotFoundException("nanaan");
         userRepository.deleteById(id);
     }
 

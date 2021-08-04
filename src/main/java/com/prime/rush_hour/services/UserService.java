@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserService {
 
     List<UserGetDto> get();
-    UserGetDto get(Integer id);
+    UserGetDto get(String email);
     UserGetDto create(UserPostDto userPostDto);
     void delete(Integer Id);
     UserGetDto update(Integer id, UserPutDto userPutDtoDtoDto);
