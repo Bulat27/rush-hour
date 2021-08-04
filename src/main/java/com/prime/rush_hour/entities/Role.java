@@ -20,6 +20,13 @@ public class Role {
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
+    public Role(ApplicationUserRole name) {
+        this.name = name;
+    }
+
+    public Role() {
+    }
+
     public Integer getId() {
         return id;
     }

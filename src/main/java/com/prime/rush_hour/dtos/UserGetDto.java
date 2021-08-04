@@ -2,6 +2,7 @@ package com.prime.rush_hour.dtos;
 
 public class UserGetDto {
 
+    //TODO:Razmisli da li treba da se vide role-ovi kad se napravi, mozda ima smisla za admina
     private int id;
     private String firstName;
     private String lastName;
