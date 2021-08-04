@@ -37,13 +37,12 @@ public class UserServiceImpl implements UserService{
         if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
 
         User user = userMapper.userPostDtoToUser(userPostDto);
-        //TODO: Implement the logic to prevent the same username(email)
         encodePassword(user);
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
     }
 
-    //TODO: Encode the password here too
+
     //TODO: Forbid fields like "  " or something like that. Check out the annotations for it.
     @Override
     public UserGetDto update(Integer id, UserPutDto userPutDto){
