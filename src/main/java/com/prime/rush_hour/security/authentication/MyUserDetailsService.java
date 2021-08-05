@@ -4,6 +4,7 @@ import com.prime.rush_hour.entities.Role;
 import com.prime.rush_hour.entities.User;
 import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.repositories.UserRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +20,7 @@ import java.util.Collection;
 import java.util.HashSet;
 
 @Service
-@Transactional(propagation = Propagation.REQUIRED)
+//@Transactional(propagation = Propagation.REQUIRED)
 public class MyUserDetailsService implements UserDetailsService {
 
     //private PasswordEncoder passwordEncoder;
@@ -43,8 +44,8 @@ public class MyUserDetailsService implements UserDetailsService {
 
      private Collection<GrantedAuthority> getAuthorities(User user){
         Collection<GrantedAuthority> authorities = new HashSet<>();
-//        Collection<Role> roles = user.getRoles();
-        for (Role role : user.getRoles()) {
+        Collection<Role> roles = user.getRoles();
+        for (Role role : roles) {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName()));
         }
         return authorities;

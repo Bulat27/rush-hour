@@ -2,6 +2,7 @@ package com.prime.rush_hour.controllers;
 
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
+import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class SignUpController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserGetDto> create(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto));
+    public ResponseEntity<UserGetDto> signUp(@RequestBody @Valid UserPostDto userPostDto){
+        return ResponseEntity.ok(userService.create(userPostDto, ApplicationUserRole.USER));
     }
 
     @Autowired

@@ -14,6 +14,7 @@ import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,11 +39,11 @@ public class UserServiceImpl implements UserService{
 
     //TODO: Ovu koristi user uloga, po default-u stavlja user role
     @Override
-    public UserGetDto create(UserPostDto userPostDto) {
+    public UserGetDto create(UserPostDto userPostDto, ApplicationUserRole roleType) {
         if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
 
         User user = userMapper.userPostDtoToUser(userPostDto);
-        addDefaultRole(user);
+        addRole(user, roleType);
         encodePassword(user);
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
@@ -51,31 +52,33 @@ public class UserServiceImpl implements UserService{
 
     //TODO: Forbid fields like "  " or something like that. Check out the annotations for it.
     @Override
-    public UserGetDto update(Integer id, UserPutDto userPutDto){
+    public UserGetDto update(String email, UserPutDto userPutDto){
         //TODO:Change this!
-        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("nanana"));
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
 
         userMapper.update(userPutDto, user);
-        encodePassword(user);
+        if(userPutDto.getPassword() != null) encodePassword(user);
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
     }
 
+    //TODO: Vidi dal' da invalidiras token nakon sto user sebe obrise
     @Override
-    public void delete(Integer id) {
+    @Transactional
+    public void delete(String email) {
         //TODO:Change this!
-        if(!userRepository.existsById(id)) throw new UserNotFoundException("nanaan");
-        userRepository.deleteById(id);
+        if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
+        userRepository.deleteByEmail(email);
     }
 
     private void encodePassword(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
-    private void addDefaultRole(User user){
+    private void addRole(User user, ApplicationUserRole roleType){
         //TODO: Vidi koji ces Exception ovde, ali ovo nikad ne bi trebalo da se desi
-        Role role = roleRepository.findByName(ApplicationUserRole.USER).orElseThrow();
+        Role role = roleRepository.findByName(roleType).orElseThrow();
         user.addRole(role);
     }
 

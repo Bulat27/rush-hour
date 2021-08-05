@@ -4,6 +4,7 @@ import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
 import com.prime.rush_hour.security.authentication.MyUserDetails;
+import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ public class UserController {
 
     private UserService userService;
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<UserGetDto>> get(){
         return ResponseEntity.ok(userService.get());
@@ -35,19 +37,22 @@ public class UserController {
           return ResponseEntity.ok(userService.get(email));
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<UserGetDto> create(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto));
+        return ResponseEntity.ok(userService.create(userPostDto, ApplicationUserRole.ADMIN));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UserGetDto> update(@PathVariable Integer id, @RequestBody @Valid UserPutDto userPutDto){
-        return ResponseEntity.ok(userService.update(id, userPutDto));
+    @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
+    @PutMapping("/{email}")
+    public ResponseEntity<UserGetDto> update(@PathVariable String email, @RequestBody @Valid UserPutDto userPutDto){
+        return ResponseEntity.ok(userService.update(email, userPutDto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Integer id){
-            userService.delete(id);
+    @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
+    @DeleteMapping("/{email}")
+    public ResponseEntity<Void> delete(@PathVariable String email){
+            userService.delete(email);
             return ResponseEntity.ok().build();
     }
 
