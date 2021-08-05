@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.security.Principal;
 import java.util.List;
 
+//TODO: Razni statusni kodovi (npr na signup-u) nisu kako treba. Radi na tome kad dodje vreme.
 @Controller
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -31,10 +32,7 @@ public class UserController {
     @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
     @GetMapping("/{email}")
     public ResponseEntity<UserGetDto> get(@PathVariable String email, Authentication authentication) {
-//        if(hasPermission(email, authentication))
           return ResponseEntity.ok(userService.get(email));
-        //TODO : vidid sta ces u else
-//        else return null;
     }
 
     @PostMapping
@@ -52,12 +50,6 @@ public class UserController {
             userService.delete(id);
             return ResponseEntity.ok().build();
     }
-
-//    private boolean hasPermission(String email, Authentication authentication){
-//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-//        return email.equals(userDetails.getUsername());
-//        authentication.
-//    }
 
     @Autowired
     public void setUserService(UserService userService) {

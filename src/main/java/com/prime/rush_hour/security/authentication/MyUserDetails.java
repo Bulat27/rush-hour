@@ -12,6 +12,7 @@ public class MyUserDetails implements UserDetails {
     //TODO: Vrati u private
     public String username;
     private String password;
+    private Collection<? extends GrantedAuthority> authorities;
 //    private final PasswordEncoder passwordEncoder;
 
 //    public MyUserDetails(String userName, PasswordEncoder passwordEncoder) {
@@ -22,7 +23,8 @@ public class MyUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //TODO: Menjaj ovo kad implementiras uloge
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+//        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return authorities;
     }
 
     @Override
@@ -62,5 +64,9 @@ public class MyUserDetails implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setAuthorities(Collection<? extends GrantedAuthority> authorities) {
+        this.authorities = authorities;
     }
 }
