@@ -88,7 +88,8 @@ public class UserServiceImpl implements UserService{
 
     private void addRoles(User user, List<ApplicationUserRole> roleTypes){
         for (ApplicationUserRole roleType : roleTypes) {
-            Role role = roleRepository.findByName(roleType).orElseThrow(() -> new IllegalArgumentException());
+            Role role = roleRepository.findByName(roleType)
+                    .orElseThrow(() -> new IllegalStateException(String.format("The role %s doesn't exist in the database", roleType.name())));
             user.addRole(role);
         }
     }
