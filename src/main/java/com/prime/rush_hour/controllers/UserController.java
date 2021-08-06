@@ -61,6 +61,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<UserGetDto> signUp(@RequestBody @Valid UserPostDto userPostDto){
+        return ResponseEntity.ok(userService.create(userPostDto, Arrays.asList(ApplicationUserRole.USER)));
+    }
+
     @Autowired
     public void setUserService(UserService userService) {
         this.userService = userService;
