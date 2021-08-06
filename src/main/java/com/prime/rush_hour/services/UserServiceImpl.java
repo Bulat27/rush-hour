@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService{
 
     private void addRoles(User user, List<ApplicationUserRole> roleTypes){
         for (ApplicationUserRole roleType : roleTypes) {
-            Role role = roleRepository.findByName(roleType).orElseThrow();
+            Role role = roleRepository.findByName(roleType).orElseThrow(() -> new IllegalArgumentException());
             user.addRole(role);
         }
     }
