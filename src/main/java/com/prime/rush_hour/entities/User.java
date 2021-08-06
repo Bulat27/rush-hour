@@ -30,8 +30,7 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
 
-    public User() {
-    }
+    public User() { }
 
     public Integer getId() {
         return id;

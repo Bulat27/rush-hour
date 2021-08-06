@@ -4,7 +4,6 @@ import com.prime.rush_hour.jwt.JwtAuthenticationFilter;
 import com.prime.rush_hour.jwt.JwtConfig;
 import com.prime.rush_hour.jwt.JwtTokenVerifier;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -50,19 +49,12 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtAuthenticationFilter.class)
                 .authorizeRequests()
                 .antMatchers("/", "index", "/css/*", "/js/*", "/login", "/signup").permitAll()
-                //TODO: See what else is needed
                 .anyRequest()
                 .authenticated();
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.inMemoryAuthentication()
-//                .withUser("mirjana").password(passwordEncoder.encode("mirjana")).roles("USER")
-//                .and()
-//                .withUser("zdravko").password(passwordEncoder.encode("zdravko")).roles("USER")
-//                .and()
-//                .withUser("admin").password(passwordEncoder.encode("admin")).roles("ADMIN");
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 

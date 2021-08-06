@@ -15,7 +15,6 @@ public class RoleNameConverter implements AttributeConverter<ApplicationUserRole
     @Override
     public ApplicationUserRole convertToEntityAttribute(String name) {
         if(name ==  null) return null;
-        //TODO: Vidi dal nekad moze da se desi da ti baci IllegalArgumentException
         return ApplicationUserRole.valueOf(name);
     }
 }

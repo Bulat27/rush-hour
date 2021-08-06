@@ -22,8 +22,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     private final AuthenticationManager authenticationManager;
     private final JwtConfig jwtConfig;
     private final SecretKey secretKey;
-    //TODO: Move this to some config class
-//    public static final String secretKey = Encoders.BASE64.encode(Keys.secretKeyFor(SignatureAlgorithm.HS512).getEncoded());
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager, JwtConfig jwtConfig, SecretKey secretKey){
         this.authenticationManager = authenticationManager;
@@ -40,17 +38,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Authentication authenticate = authenticationManager.authenticate(authentication);
             return authenticate;
 
-        } catch (IOException e) {//TODO: Vidi sta ces sa ovim, nudi mi i neki @SneakyThrows
+        } catch (IOException e) {
             throw new RuntimeException();
         }
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-//        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
-//        String secretString = Encoders.BASE64.encode(key.getEncoded());
-        //String secretKey = "ovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratkoovogovnomoradabudebasbasbasdugackodabileporadiloidanebipraviloproblemnadamsedaimjeovodovoljnodugackojebemimmajkuustanapisacujossamodanebislucajnobiloprekratko";
-
         String token = Jwts.builder()
                 .setSubject(authResult.getName())
                 .claim("authorities", authResult.getAuthorities())
@@ -60,6 +54,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .compact();
 
         response.addHeader(jwtConfig.getAuthorizationHeader(), jwtConfig.getTokenPrefix() + token);
-
     }
 }

@@ -4,23 +4,19 @@ import com.prime.rush_hour.dtos.RolePutDto;
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
-import com.prime.rush_hour.security.authentication.MyUserDetails;
 import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
 import java.util.Arrays;
 import java.util.List;
 
-//TODO: Razni statusni kodovi (npr na signup-u) nisu kako treba. Radi na tome kad dodje vreme.
 @Controller
 @RequestMapping("/api/v1/users")
 public class UserController {
@@ -62,7 +58,6 @@ public class UserController {
     @PutMapping("/{email}/roles")
     public ResponseEntity<Void> updateRoles(@PathVariable String email, @RequestBody List<RolePutDto> rolePutDtos){
         userService.updateRoles(email, rolePutDtos);
-        //System.out.println(rolePutDtos);
         return ResponseEntity.ok().build();
     }
 

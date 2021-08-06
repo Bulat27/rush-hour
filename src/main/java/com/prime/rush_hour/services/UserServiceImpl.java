@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,11 +51,8 @@ public class UserServiceImpl implements UserService{
         return userMapper.userToUserGetDto(user);
     }
 
-
-    //TODO: Forbid fields like "  " or something like that. Check out the annotations for it.
     @Override
     public UserGetDto update(String email, UserPutDto userPutDto){
-        //TODO:Change this!
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
         if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
 
@@ -69,43 +65,31 @@ public class UserServiceImpl implements UserService{
     @Override
     public void updateRoles(String email, List<RolePutDto> rolePutDtos) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-//        if(invalidRoles(roleTypes)) throw new InvalidRoleException();
         user.getRoles().clear();
         List<ApplicationUserRole> roleTypes = rolePutDtos.stream().map(rolePutDto -> rolePutDto.getName()).collect(Collectors.toList());
         addRoles(user, roleTypes);
         userRepository.save(user);
     }
 
-    //TODO: Vidi dal' da invalidiras token nakon sto user sebe obrise
     @Override
     @Transactional
     public void delete(String email) {
-        //TODO:Change this!
         if(email.equals("nbulat99@gmail.com")) throw new AdminCannotBeDeletedException();
 
         if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
         userRepository.deleteByEmail(email);
     }
 
-
-
     private void encodePassword(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
     private void addRoles(User user, List<ApplicationUserRole> roleTypes){
-        //TODO: Vidi koji ces Exception ovde, ali ovo nikad ne bi trebalo da se desi
         for (ApplicationUserRole roleType : roleTypes) {
             Role role = roleRepository.findByName(roleType).orElseThrow();
             user.addRole(role);
         }
     }
-
-//    private boolean invalidRoles(List<ApplicationUserRole> roleTypes){
-//        for (ApplicationUserRole roleType : ) {
-//
-//        }
-//    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {

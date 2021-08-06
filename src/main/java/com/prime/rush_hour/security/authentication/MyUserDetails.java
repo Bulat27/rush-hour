@@ -1,10 +1,8 @@
 package com.prime.rush_hour.security.authentication;
 
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 public class MyUserDetails implements UserDetails {
@@ -12,12 +10,7 @@ public class MyUserDetails implements UserDetails {
     private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
-//    private final PasswordEncoder passwordEncoder;
 
-//    public MyUserDetails(String userName, PasswordEncoder passwordEncoder) {
-//        this.userName = userName;
-//        this.passwordEncoder = passwordEncoder;
-//    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -26,7 +19,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-//        return passwordEncoder.encode("password");
         return password;
     }
 
