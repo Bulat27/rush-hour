@@ -1,5 +1,6 @@
 package com.prime.rush_hour.controllers;
 
+import com.prime.rush_hour.dtos.RolePutDto;
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 //TODO: Razni statusni kodovi (npr na signup-u) nisu kako treba. Radi na tome kad dodje vreme.
@@ -40,7 +42,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<UserGetDto> create(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto, ApplicationUserRole.ADMIN));
+        return ResponseEntity.ok(userService.create(userPostDto, Arrays.asList(ApplicationUserRole.ADMIN,ApplicationUserRole.USER)));
     }
 
     @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
@@ -52,8 +54,16 @@ public class UserController {
     @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> delete(@PathVariable String email){
-            userService.delete(email);
-            return ResponseEntity.ok().build();
+        userService.delete(email);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("/{email}/roles")
+    public ResponseEntity<Void> updateRoles(@PathVariable String email, @RequestBody List<RolePutDto> rolePutDtos){
+        userService.updateRoles(email, rolePutDtos);
+        //System.out.println(rolePutDtos);
+        return ResponseEntity.ok().build();
     }
 
     @Autowired

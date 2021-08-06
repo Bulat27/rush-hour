@@ -24,6 +24,15 @@ public class UserPostDto {
     @NotBlank
     private String password;
 
+    public UserPostDto() {
+    }
+
+    public UserPostDto(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 
     public Integer getId() {
         return id;

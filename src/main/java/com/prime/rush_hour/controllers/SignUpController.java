@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/signup")
@@ -21,7 +22,7 @@ public class SignUpController {
 
     @PostMapping
     public ResponseEntity<UserGetDto> signUp(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto, ApplicationUserRole.USER));
+        return ResponseEntity.ok(userService.create(userPostDto, Arrays.asList(ApplicationUserRole.USER)));
     }
 
     @Autowired

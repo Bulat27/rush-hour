@@ -1,9 +1,11 @@
 package com.prime.rush_hour.services;
 
+import com.prime.rush_hour.dtos.RolePutDto;
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
 import com.prime.rush_hour.entities.Role;
+import com.prime.rush_hour.exception_handling.AdminCannotBeDeletedException;
 import com.prime.rush_hour.exception_handling.EmailExistsException;
 import com.prime.rush_hour.exception_handling.UserNotFoundException;
 import com.prime.rush_hour.entities.User;
@@ -16,7 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -37,13 +41,12 @@ public class UserServiceImpl implements UserService{
         return userMapper.userToUserGetDto(user);
     }
 
-    //TODO: Ovu koristi user uloga, po default-u stavlja user role
     @Override
-    public UserGetDto create(UserPostDto userPostDto, ApplicationUserRole roleType) {
+    public UserGetDto create(UserPostDto userPostDto, List<ApplicationUserRole> roleTypes) {
         if(userRepository.existsByEmail(userPostDto.getEmail())) throw new EmailExistsException(userPostDto.getEmail());
 
         User user = userMapper.userPostDtoToUser(userPostDto);
-        addRole(user, roleType);
+        addRoles(user, roleTypes);
         encodePassword(user);
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
@@ -63,24 +66,46 @@ public class UserServiceImpl implements UserService{
         return userMapper.userToUserGetDto(user);
     }
 
+    @Override
+    public void updateRoles(String email, List<RolePutDto> rolePutDtos) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
+//        if(invalidRoles(roleTypes)) throw new InvalidRoleException();
+        user.getRoles().clear();
+        List<ApplicationUserRole> roleTypes = rolePutDtos.stream().map(rolePutDto -> rolePutDto.getName()).collect(Collectors.toList());
+        addRoles(user, roleTypes);
+        userRepository.save(user);
+    }
+
     //TODO: Vidi dal' da invalidiras token nakon sto user sebe obrise
     @Override
     @Transactional
     public void delete(String email) {
         //TODO:Change this!
+        if(email.equals("nbulat99@gmail.com")) throw new AdminCannotBeDeletedException();
+
         if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
         userRepository.deleteByEmail(email);
     }
+
+
 
     private void encodePassword(User user){
         user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
-    private void addRole(User user, ApplicationUserRole roleType){
+    private void addRoles(User user, List<ApplicationUserRole> roleTypes){
         //TODO: Vidi koji ces Exception ovde, ali ovo nikad ne bi trebalo da se desi
-        Role role = roleRepository.findByName(roleType).orElseThrow();
-        user.addRole(role);
+        for (ApplicationUserRole roleType : roleTypes) {
+            Role role = roleRepository.findByName(roleType).orElseThrow();
+            user.addRole(role);
+        }
     }
+
+//    private boolean invalidRoles(List<ApplicationUserRole> roleTypes){
+//        for (ApplicationUserRole roleType : ) {
+//
+//        }
+//    }
 
     @Autowired
     public void setUserRepository(UserRepository userRepository) {

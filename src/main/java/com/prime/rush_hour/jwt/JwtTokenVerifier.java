@@ -34,7 +34,7 @@ public class JwtTokenVerifier extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authorizationHeader  = request.getHeader(jwtConfig.getAuthorizationHeader());
-        //TODO: Nisam uspeo da nadjem tu neku biblioteku koju je on koristio
+
         //TODO: Zasto je ovako uradio?
         if(authorizationHeader == null || authorizationHeader.isEmpty() || !authorizationHeader.startsWith(jwtConfig.getTokenPrefix())){
             filterChain.doFilter(request, response);

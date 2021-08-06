@@ -9,8 +9,7 @@ import java.util.Collection;
 
 public class MyUserDetails implements UserDetails {
 
-    //TODO: Vrati u private
-    public String username;
+    private String username;
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
 //    private final PasswordEncoder passwordEncoder;
@@ -22,8 +21,6 @@ public class MyUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        //TODO: Menjaj ovo kad implementiras uloge
-//        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
         return authorities;
     }
 

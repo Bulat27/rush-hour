@@ -13,10 +13,8 @@ public class Role {
     private Integer id;
 
     @Column(nullable = false)
-//    private String name;
     private ApplicationUserRole name;
 
-    //TODO: Mozda i ovde
     @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 

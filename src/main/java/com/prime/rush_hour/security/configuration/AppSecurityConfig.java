@@ -26,7 +26,7 @@ import javax.crypto.SecretKey;
                              securedEnabled = true,
                                 jsr250Enabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
-    //TODO: Vidi dal je bolje da bude final
+
     private final PasswordEncoder passwordEncoder;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
@@ -46,7 +46,6 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //TODO: Add filters
                 .addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtConfig , secretKey))
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtAuthenticationFilter.class)
                 .authorizeRequests()
