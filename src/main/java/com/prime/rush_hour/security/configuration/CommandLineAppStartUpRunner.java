@@ -19,15 +19,16 @@ public class CommandLineAppStartUpRunner implements CommandLineRunner {
     private UserService userService;
     private RoleRepository roleRepository;
     private UserRepository userRepository;
+    private InitialAdminConfig initialAdminConfig;
 
     @Override
     public void run(String... args) throws Exception {
-        if(userRepository.existsByEmail("nbulat99@gmail.com")) return;
+        if(userRepository.existsByEmail(initialAdminConfig.getEmail())) return;
 
         roleRepository.save(new Role(ADMIN));
         roleRepository.save(new Role(USER));
 
-        UserPostDto adminUser = new UserPostDto("Nikola", "Bulat", "nbulat99@gmail.com", "nikolabulat");
+        UserPostDto adminUser = new UserPostDto(initialAdminConfig.getName(), initialAdminConfig.getLastname(), initialAdminConfig.getEmail(), initialAdminConfig.getPassword());
         userService.create(adminUser, Arrays.asList(ADMIN, USER));
     }
 
@@ -44,5 +45,10 @@ public class CommandLineAppStartUpRunner implements CommandLineRunner {
     @Autowired
     public void setUserRepository(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @Autowired
+    public void setInitialAdminConfig(InitialAdminConfig initialAdminConfig) {
+        this.initialAdminConfig = initialAdminConfig;
     }
 }

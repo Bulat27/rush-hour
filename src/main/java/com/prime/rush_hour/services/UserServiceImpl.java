@@ -13,6 +13,7 @@ import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.repositories.RoleRepository;
 import com.prime.rush_hour.repositories.UserRepository;
 import com.prime.rush_hour.security.authorization.ApplicationUserRole;
+import com.prime.rush_hour.security.configuration.InitialAdminConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
+    private InitialAdminConfig initialAdminConfig;
 
     @Override
     public List<UserGetDto> get() {
@@ -74,7 +76,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void delete(String email) {
-        if(email.equals("nbulat99@gmail.com")) throw new AdminCannotBeDeletedException();
+        if(email.equals(initialAdminConfig.getEmail())) throw new AdminCannotBeDeletedException();
 
         if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
         userRepository.deleteByEmail(email);
@@ -109,5 +111,10 @@ public class UserServiceImpl implements UserService{
     @Autowired
     public void setRoleRepository(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
+    }
+
+    @Autowired
+    public void setInitialAdminConfig(InitialAdminConfig initialAdminConfig) {
+        this.initialAdminConfig = initialAdminConfig;
     }
 }
