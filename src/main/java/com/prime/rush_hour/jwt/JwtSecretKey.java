@@ -1,5 +1,6 @@
 package com.prime.rush_hour.jwt;
 
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -19,6 +20,8 @@ public class JwtSecretKey {
 
     @Bean
     public SecretKey secretKey(){
-        return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
+        //return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes());
+        byte[] keyBytes = Decoders.BASE64.decode(jwtConfig.getSecretKey());
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
