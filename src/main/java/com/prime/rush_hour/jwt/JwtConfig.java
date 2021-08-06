@@ -10,7 +10,7 @@ public class JwtConfig {
 
     private String secretKey;
     private String tokenPrefix;
-    private Integer tokenExpirationAfterDays;
+    private Integer tokenExpirationAfterMinutes;
 
     public String getSecretKey() {
         return secretKey;
@@ -28,12 +28,12 @@ public class JwtConfig {
         this.tokenPrefix = tokenPrefix;
     }
 
-    public Integer getTokenExpirationAfterDays() {
-        return tokenExpirationAfterDays;
+    public Integer getTokenExpirationAfterMinutes() {
+        return tokenExpirationAfterMinutes;
     }
 
-    public void setTokenExpirationAfterDays(Integer tokenExpirationAfterDays) {
-        this.tokenExpirationAfterDays = tokenExpirationAfterDays;
+    public void setTokenExpirationAfterMinutes(Integer tokenExpirationAfterMinutes) {
+        this.tokenExpirationAfterMinutes = tokenExpirationAfterMinutes;
     }
 
     public String getAuthorizationHeader(){
