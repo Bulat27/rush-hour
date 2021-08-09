@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.crypto.SecretKey;
@@ -24,14 +25,12 @@ import javax.crypto.SecretKey;
 @EnableGlobalMethodSecurity (prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final PasswordEncoder passwordEncoder;
     private final SecretKey secretKey;
     private final JwtConfig jwtConfig;
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public SecurityConfiguration(PasswordEncoder passwordEncoder, SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService){
-        this.passwordEncoder = passwordEncoder;
+    public SecurityConfiguration( SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService){
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;
         this.userDetailsService = userDetailsService;
@@ -43,8 +42,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
-                //.addFilter(new JwtAuthenticationFilter(authenticationManager(), jwtConfig , secretKey))
-//                .addFilter(getJWTAuthenticationFilter())
                 .addFilter(getJwtAuthenticationFilter())
                 .addFilterAfter(new JwtTokenVerifier(secretKey, jwtConfig), JwtAuthenticationFilter.class)
                 .authorizeRequests()
@@ -61,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setPasswordEncoder(passwordEncoder);
+        provider.setPasswordEncoder(getPasswordEncoder());
         provider.setUserDetailsService(userDetailsService);
         return provider;
     }
@@ -71,10 +68,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         filter.setFilterProcessesUrl("/api/v1/login");
         return filter;
     }
-//    @Bean
-//    public JwtAuthenticationFilter getJWTAuthenticationFilter() throws Exception {
-//        final JwtAuthenticationFilter filter = new JwtAuthenticationFilter(authenticationManager(), jwtConfig, secretKey);
-//        filter.setFilterProcessesUrl("/api/v1/login");
-//        return filter;
-//    }
+
+    @Bean
+    public PasswordEncoder getPasswordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
 }

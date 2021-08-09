@@ -13,7 +13,7 @@ import com.prime.rush_hour.mapstruct.mappers.UserMapper;
 import com.prime.rush_hour.repositories.RoleRepository;
 import com.prime.rush_hour.repositories.UserRepository;
 import com.prime.rush_hour.security.authorization.ApplicationUserRole;
-import com.prime.rush_hour.security.configuration.InitialAdminConfig;
+import com.prime.rush_hour.security.configuration.InitialAdminConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService{
     private UserMapper userMapper;
     private PasswordEncoder passwordEncoder;
     private RoleRepository roleRepository;
-    private InitialAdminConfig initialAdminConfig;
+    private InitialAdminConfiguration initialAdminConfig;
 
     @Override
     public List<UserGetDto> get() {
@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Autowired
-    public void setInitialAdminConfig(InitialAdminConfig initialAdminConfig) {
+    public void setInitialAdminConfig(InitialAdminConfiguration initialAdminConfig) {
         this.initialAdminConfig = initialAdminConfig;
     }
 }

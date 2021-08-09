@@ -19,7 +19,7 @@ public class CommandLineAppStartUpRunner implements CommandLineRunner {
     private UserService userService;
     private RoleRepository roleRepository;
     private UserRepository userRepository;
-    private InitialAdminConfig initialAdminConfig;
+    private InitialAdminConfiguration initialAdminConfig;
 
     @Override
     public void run(String... args) throws Exception {
@@ -48,7 +48,7 @@ public class CommandLineAppStartUpRunner implements CommandLineRunner {
     }
 
     @Autowired
-    public void setInitialAdminConfig(InitialAdminConfig initialAdminConfig) {
+    public void setInitialAdminConfig(InitialAdminConfiguration initialAdminConfig) {
         this.initialAdminConfig = initialAdminConfig;
     }
 }

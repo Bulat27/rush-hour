@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "application.admin")
-public class InitialAdminConfig {
+public class InitialAdminConfiguration {
 
     private String name;
     private String lastname;
