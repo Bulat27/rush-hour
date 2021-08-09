@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.ArrayList;
 import java.util.List;
-//TODO: Vidi dal da ulepsavas i ove ostale greske
+
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
@@ -27,8 +27,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
-    @ExceptionHandler({AdminCannotBeDeletedException.class})
-    public ResponseEntity<Object> handleAdminCannotBeDeletedException(AdminCannotBeDeletedException ex, WebRequest request){
+    @ExceptionHandler({AdminCannotBeModifiedException.class})
+    public ResponseEntity<Object> handleAdminCannotBeModifiedException(AdminCannotBeModifiedException ex, WebRequest request){
         return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.FORBIDDEN, request);
     }
 
@@ -44,9 +44,8 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-//        String body = "Arguments are not valid.";
-//        return new ResponseEntity<>(ex.getParameter(), HttpStatus.BAD_REQUEST);
         List<String> errors = new ArrayList<>();
+
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
             errors.add(error.getField() + ": " + error.getDefaultMessage());
         }
@@ -54,9 +53,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             errors.add(error.getObjectName() + ": " + error.getDefaultMessage());
         }
 
-        ApiError apiError =
-                new ApiError(HttpStatus.BAD_REQUEST, "Arguments are not valid", errors);
-        return handleExceptionInternal(
-                ex, apiError, headers, apiError.getStatus(), request);
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Arguments are not valid", errors);
+        return handleExceptionInternal(ex, apiError, headers, apiError.getStatus(), request);
     }
 }

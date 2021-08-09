@@ -22,7 +22,6 @@ public class ApiError {
         super();
         this.status = status;
         this.message = message;
-        //TODO: Vidi za Listof... kao sa njegovog komentara
         errors = Arrays.asList(error);
     }
 

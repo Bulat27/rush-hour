@@ -11,9 +11,11 @@ public class UserPutDto {
 
     private String firstName;
     private String lastName;
+
     @Email
     @NotBlank
     private String email;
+
     private String password;
     private List<ApplicationUserRole> roles;
 

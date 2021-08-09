@@ -1,11 +1,10 @@
 package com.prime.rush_hour.services;
 
-import com.prime.rush_hour.dtos.RolePutDto;
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
 import com.prime.rush_hour.entities.Role;
-import com.prime.rush_hour.exception_handling.AdminCannotBeDeletedException;
+import com.prime.rush_hour.exception_handling.AdminCannotBeModifiedException;
 import com.prime.rush_hour.exception_handling.EmailExistsException;
 import com.prime.rush_hour.exception_handling.UserNotFoundException;
 import com.prime.rush_hour.entities.User;
@@ -54,8 +53,9 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public UserGetDto update(UserPutDto userPutDto){
+        if(userPutDto.getEmail().equals(initialAdminConfig.getEmail())) throw new AdminCannotBeModifiedException();
+
         User user = userRepository.findByEmail(userPutDto.getEmail()).orElseThrow(() -> new UserNotFoundException(userPutDto.getEmail()));
-        //if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
 
         userMapper.update(userPutDto, user);
         if(userPutDto.getPassword() != null) encodePassword(user);
@@ -67,7 +67,7 @@ public class UserServiceImpl implements UserService{
     @Override
     @Transactional
     public void delete(String email) {
-        if(email.equals(initialAdminConfig.getEmail())) throw new AdminCannotBeDeletedException();
+        if(email.equals(initialAdminConfig.getEmail())) throw new AdminCannotBeModifiedException();
 
         if(!userRepository.existsByEmail(email)) throw new UserNotFoundException(email);
         userRepository.deleteByEmail(email);

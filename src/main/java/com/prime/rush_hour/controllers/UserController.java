@@ -1,6 +1,5 @@
 package com.prime.rush_hour.controllers;
 
-import com.prime.rush_hour.dtos.RolePutDto;
 import com.prime.rush_hour.dtos.UserGetDto;
 import com.prime.rush_hour.dtos.UserPostDto;
 import com.prime.rush_hour.dtos.UserPutDto;
@@ -29,7 +28,6 @@ public class UserController {
         return ResponseEntity.ok(userService.get());
     }
 
-    //@PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
     @GetMapping("/{email}")
     public ResponseEntity<UserGetDto> get(@PathVariable String email, Authentication auth) {
         if(!isAdmin(auth) && !isLoggedInUser(auth, email)) throw new InvalidUserException();
@@ -42,20 +40,16 @@ public class UserController {
         return ResponseEntity.ok(userService.create(userPostDto, List.of(ApplicationUserRole.ADMIN,ApplicationUserRole.USER)));
     }
 
-//    @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
-    //@PutMapping("/{email}")
     @PutMapping
     public ResponseEntity<UserGetDto> update(@RequestBody @Valid UserPutDto userPutDto, Authentication auth){
         boolean isAdmin = isAdmin(auth);
         if(!isAdmin && !isLoggedInUser(auth, userPutDto.getEmail())) throw new InvalidUserException();
 
-        //TODO: Vidi kako se handle-a exception
         if(!isAdmin && userPutDto.getRoles() != null) throw new IllegalArgumentException("User cannot update the roles");
 
         return ResponseEntity.ok(userService.update(userPutDto));
     }
 
-    //@PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{email}")
     public ResponseEntity<Void> delete(@PathVariable String email, Authentication auth){
         if(!isAdmin(auth) && !isLoggedInUser(auth, email)) throw new InvalidUserException();

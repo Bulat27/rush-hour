@@ -83,8 +83,4 @@ public class User {
     public void addRole(Role role){
         roles.add(role);
     }
-
-    public static Set<Role> getInitializedSet(){
-        return new HashSet<>();
-    }
 }
