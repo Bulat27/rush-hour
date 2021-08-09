@@ -1,7 +1,10 @@
 package com.prime.rush_hour.dtos;
 
+import com.prime.rush_hour.security.authorization.ApplicationUserRole;
+
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class UserPutDto {
 
@@ -12,6 +15,7 @@ public class UserPutDto {
     @NotBlank
     private String email;
     private String password;
+    private List<ApplicationUserRole> roles;
 
 
     public String getFirstName() {
@@ -44,5 +48,13 @@ public class UserPutDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<ApplicationUserRole> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<ApplicationUserRole> roles) {
+        this.roles = roles;
     }
 }

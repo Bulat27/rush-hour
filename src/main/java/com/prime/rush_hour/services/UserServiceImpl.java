@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService{
@@ -60,17 +59,9 @@ public class UserServiceImpl implements UserService{
 
         userMapper.update(userPutDto, user);
         if(userPutDto.getPassword() != null) encodePassword(user);
+        addRoles(user, userPutDto.getRoles());
         userRepository.save(user);
         return userMapper.userToUserGetDto(user);
-    }
-
-    @Override
-    public void updateRoles(String email, List<RolePutDto> rolePutDtos) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        user.getRoles().clear();
-        List<ApplicationUserRole> roleTypes = rolePutDtos.stream().map(rolePutDto -> rolePutDto.getName()).collect(Collectors.toList());
-        addRoles(user, roleTypes);
-        userRepository.save(user);
     }
 
     @Override
@@ -87,6 +78,9 @@ public class UserServiceImpl implements UserService{
     }
 
     private void addRoles(User user, List<ApplicationUserRole> roleTypes){
+        if(roleTypes == null || roleTypes.isEmpty()) return;
+
+        user.getRoles().clear();
         for (ApplicationUserRole roleType : roleTypes) {
             Role role = roleRepository.findByName(roleType)
                     .orElseThrow(() -> new IllegalStateException(String.format("The role %s doesn't exist in the database", roleType.name())));

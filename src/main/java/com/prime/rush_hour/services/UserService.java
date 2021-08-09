@@ -17,5 +17,4 @@ public interface UserService {
     UserGetDto create(UserPostDto userPostDto, List<ApplicationUserRole> roleTypes);
     void delete(String email);
     UserGetDto update(UserPutDto userPutDto);
-    void updateRoles(String email, List<RolePutDto> rolePutDtos);
 }

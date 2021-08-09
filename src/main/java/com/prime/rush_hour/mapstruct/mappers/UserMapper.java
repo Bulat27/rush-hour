@@ -16,6 +16,8 @@ public interface UserMapper {
     UserGetDto userToUserGetDto(User user);
     User userPostDtoToUser(UserPostDto userPostDto);
     List<UserGetDto> usersToUserGetDtos(List<User> users);
+
+    @Mapping(target = "roles", ignore = true)
     void update(UserPutDto userPutDto, @MappingTarget User user);
 
     @Mapping(target = "username", source = "email")

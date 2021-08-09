@@ -46,7 +46,11 @@ public class UserController {
     //@PutMapping("/{email}")
     @PutMapping
     public ResponseEntity<UserGetDto> update(@RequestBody @Valid UserPutDto userPutDto, Authentication auth){
-        if(!isAdmin(auth) && !isLoggedInUser(auth, userPutDto.getEmail())) throw new InvalidUserException();
+        boolean isAdmin = isAdmin(auth);
+        if(!isAdmin && !isLoggedInUser(auth, userPutDto.getEmail())) throw new InvalidUserException();
+
+        //TODO: Vidi kako se handle-a exception
+        if(!isAdmin && userPutDto.getRoles() != null) throw new IllegalArgumentException("User cannot update the roles");
 
         return ResponseEntity.ok(userService.update(userPutDto));
     }
@@ -57,13 +61,6 @@ public class UserController {
         if(!isAdmin(auth) && !isLoggedInUser(auth, email)) throw new InvalidUserException();
 
         userService.delete(email);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping("/{email}/roles")
-    public ResponseEntity<Void> updateRoles(@PathVariable String email, @RequestBody List<RolePutDto> rolePutDtos){
-        userService.updateRoles(email, rolePutDtos);
         return ResponseEntity.ok().build();
     }
 
