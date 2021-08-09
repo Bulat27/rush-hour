@@ -9,15 +9,12 @@ import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 import com.prime.rush_hour.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.security.Principal;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -32,10 +29,11 @@ public class UserController {
         return ResponseEntity.ok(userService.get());
     }
 
-    @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
     @GetMapping("/{email}")
-    public ResponseEntity<UserGetDto> get(@PathVariable String email, Authentication authentication) {
-          return ResponseEntity.ok(userService.get(email));
+    public ResponseEntity<UserGetDto> get(@PathVariable String email, Authentication auth) {
+        if(!isAdmin(auth) && !isLoggedInUser(auth, email)) throw new InvalidUserException();
+        return ResponseEntity.ok(userService.get(email));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -48,14 +46,16 @@ public class UserController {
     //@PutMapping("/{email}")
     @PutMapping
     public ResponseEntity<UserGetDto> update(@RequestBody @Valid UserPutDto userPutDto, Authentication auth){
-        if(!isAdmin(auth) && !isLoggedInUser(auth, userPutDto)) throw new InvalidUserException();
+        if(!isAdmin(auth) && !isLoggedInUser(auth, userPutDto.getEmail())) throw new InvalidUserException();
 
         return ResponseEntity.ok(userService.update(userPutDto));
     }
 
-    @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
+    //@PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{email}")
-    public ResponseEntity<Void> delete(@PathVariable String email){
+    public ResponseEntity<Void> delete(@PathVariable String email, Authentication auth){
+        if(!isAdmin(auth) && !isLoggedInUser(auth, email)) throw new InvalidUserException();
+
         userService.delete(email);
         return ResponseEntity.ok().build();
     }
@@ -76,8 +76,8 @@ public class UserController {
         return auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_" + ApplicationUserRole.ADMIN.name()));
     }
 
-    private boolean isLoggedInUser(Authentication auth, UserPutDto userPutDto){
-        return userPutDto.getEmail().equals(auth.getPrincipal());
+    private boolean isLoggedInUser(Authentication auth, String email){
+        return email.equals(auth.getPrincipal());
     }
 
     @Autowired
