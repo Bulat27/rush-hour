@@ -21,10 +21,8 @@ import javax.crypto.SecretKey;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity (prePostEnabled = true,
-                             securedEnabled = true,
-                                jsr250Enabled = true)
-public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
+@EnableGlobalMethodSecurity (prePostEnabled = true)
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private final PasswordEncoder passwordEncoder;
     private final SecretKey secretKey;
@@ -32,7 +30,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public AppSecurityConfig(PasswordEncoder passwordEncoder, SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService){
+    public SecurityConfiguration(PasswordEncoder passwordEncoder, SecretKey secretKey, JwtConfig jwtConfig, UserDetailsService userDetailsService){
         this.passwordEncoder = passwordEncoder;
         this.secretKey = secretKey;
         this.jwtConfig = jwtConfig;

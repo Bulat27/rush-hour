@@ -38,7 +38,7 @@ public class UserController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<UserGetDto> create(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto, Arrays.asList(ApplicationUserRole.ADMIN,ApplicationUserRole.USER)));
+        return ResponseEntity.ok(userService.create(userPostDto, List.of(ApplicationUserRole.ADMIN,ApplicationUserRole.USER)));
     }
 
     @PreAuthorize("#email == authentication.principal or hasRole('ROLE_ADMIN')")
@@ -63,7 +63,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserGetDto> signUp(@RequestBody @Valid UserPostDto userPostDto){
-        return ResponseEntity.ok(userService.create(userPostDto, Arrays.asList(ApplicationUserRole.USER)));
+        return ResponseEntity.ok(userService.create(userPostDto, List.of(ApplicationUserRole.USER)));
     }
 
     @Autowired

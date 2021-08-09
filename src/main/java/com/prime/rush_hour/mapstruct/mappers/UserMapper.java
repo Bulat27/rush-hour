@@ -17,8 +17,7 @@ public interface UserMapper {
     User userPostDtoToUser(UserPostDto userPostDto);
     List<UserGetDto> usersToUserGetDtos(List<User> users);
     void update(UserPutDto userPutDto, @MappingTarget User user);
-    @Mappings({
-            @Mapping(target = "username", source = "email")
-    })
+
+    @Mapping(target = "username", source = "email")
     MyUserDetails userToMyUserDetails(User user);
 }
