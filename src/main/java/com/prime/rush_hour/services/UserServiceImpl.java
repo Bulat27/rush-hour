@@ -54,9 +54,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserGetDto update(String email, UserPutDto userPutDto){
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
-        if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
+    public UserGetDto update(UserPutDto userPutDto){
+        User user = userRepository.findByEmail(userPutDto.getEmail()).orElseThrow(() -> new UserNotFoundException(userPutDto.getEmail()));
+        //if(userPutDto.getEmail() != null && userRepository.existsByEmail(userPutDto.getEmail())) throw new EmailExistsException(userPutDto.getEmail());
 
         userMapper.update(userPutDto, user);
         if(userPutDto.getPassword() != null) encodePassword(user);

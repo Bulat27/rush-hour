@@ -1,6 +1,7 @@
 package com.prime.rush_hour.dtos;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 public class UserPutDto {
 
@@ -8,6 +9,7 @@ public class UserPutDto {
     private String firstName;
     private String lastName;
     @Email
+    @NotBlank
     private String email;
     private String password;
 
