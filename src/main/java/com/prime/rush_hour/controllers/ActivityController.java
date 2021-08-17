@@ -39,9 +39,9 @@ public class ActivityController {
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    @PutMapping
-    public ResponseEntity<ActivityGetDto> update(@RequestBody @Valid ActivityPutDto activityPutDto){
-        return null;
+    @PutMapping("/{name}")
+    public ResponseEntity<ActivityGetDto> update(@PathVariable String name, @RequestBody @Valid ActivityPutDto activityPutDto){
+        return ResponseEntity.ok(activityService.update(name, activityPutDto));
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")

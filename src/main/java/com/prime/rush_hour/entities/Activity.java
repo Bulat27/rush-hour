@@ -1,13 +1,10 @@
 package com.prime.rush_hour.entities;
 
-import org.springframework.boot.convert.DurationUnit;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 
 @Entity(name = "activities")
 public class Activity {
@@ -17,10 +14,11 @@ public class Activity {
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
-    @DurationUnit(ChronoUnit.MINUTES)
+    //@DurationUnit(ChronoUnit.MINUTES)
+    //@DurationFormat(DurationStyle.detect(nanana))
     @Column(nullable = false)
     private Duration duration;
 
@@ -51,11 +49,11 @@ public class Activity {
         this.duration = duration;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 }

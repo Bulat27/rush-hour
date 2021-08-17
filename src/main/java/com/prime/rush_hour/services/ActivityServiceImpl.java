@@ -2,6 +2,7 @@ package com.prime.rush_hour.services;
 
 import com.prime.rush_hour.dtos.ActivityGetDto;
 import com.prime.rush_hour.dtos.ActivityPostDto;
+import com.prime.rush_hour.dtos.ActivityPutDto;
 import com.prime.rush_hour.entities.Activity;
 import com.prime.rush_hour.exception_handling.ActivityExistsException;
 import com.prime.rush_hour.exception_handling.ActivityNotFoundException;
@@ -35,6 +36,14 @@ public class ActivityServiceImpl implements ActivityService{
         if(activityRepository.existsByName(activityPostDto.getName())) throw new ActivityExistsException(activityPostDto.getName());
 
         Activity activity = activityMapper.activityPostDtoToActivity(activityPostDto);
+        return activityMapper.activityToActivityGetDto(activityRepository.save(activity));
+    }
+
+    @Override
+    public ActivityGetDto update(String name, ActivityPutDto activityPutDto) {
+        Activity activity = activityRepository.findByName(name).orElseThrow(() -> new ActivityNotFoundException(name));
+
+        activityMapper.updateActivity(activityPutDto, activity);
         return activityMapper.activityToActivityGetDto(activityRepository.save(activity));
     }
 
