@@ -8,7 +8,7 @@ public class ActivityPutDto {
     @NotBlank
     private String name;
     private Duration duration;
-    private double price;
+    private Double price;
 
     public String getName() {
         return name;

@@ -3,6 +3,7 @@ package com.prime.rush_hour.dtos;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 
 public class ActivityPostDto {
@@ -11,14 +12,15 @@ public class ActivityPostDto {
     @GeneratedValue
     private Integer id;
 
+    //TODO : Vidi jos za ove validacije. Tipa max cena, max trajanje itd.
     @NotBlank
     private String name;
 
-    @NotBlank
+    @NotNull
     private Duration duration;
 
-    @NotBlank
-    private double price;
+    @NotNull
+    private Double price;
 
     public Integer getId() {
         return id;
