@@ -47,7 +47,8 @@ public class ActivityController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/{name}")
     public ResponseEntity<Void> delete(@PathVariable String name){
-        return null;
+        activityService.delete(name);
+        return ResponseEntity.ok().build();
     }
 
     @Autowired

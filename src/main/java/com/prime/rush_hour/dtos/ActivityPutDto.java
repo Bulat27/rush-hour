@@ -5,6 +5,7 @@ import java.time.Duration;
 
 public class ActivityPutDto {
 
+    //TODO: Vidi da li su potrebne jos neke validacije
     //@NotBlank
     private String name;
     private Duration duration;

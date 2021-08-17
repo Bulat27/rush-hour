@@ -14,4 +14,5 @@ public interface ActivityService {
     ActivityGetDto get(String name);
     ActivityGetDto create(ActivityPostDto activityPostDto);
     ActivityGetDto update(String name, ActivityPutDto activityPutDto);
+    void delete(String name);
 }
