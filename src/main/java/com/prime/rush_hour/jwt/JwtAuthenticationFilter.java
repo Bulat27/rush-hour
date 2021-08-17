@@ -1,6 +1,7 @@
 package com.prime.rush_hour.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prime.rush_hour.exception_handling.RequestStreamException;
 import io.jsonwebtoken.Jwts;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +38,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             return authenticationManager.authenticate(authentication);
         } catch (IOException e) {
-            throw new RuntimeException();
+//            throw new RuntimeException();
+            e.printStackTrace();
+            throw new RequestStreamException();
         }
     }
 
