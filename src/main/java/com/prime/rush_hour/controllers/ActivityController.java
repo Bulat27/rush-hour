@@ -19,13 +19,13 @@ public class ActivityController {
 
     private ActivityService activityService;
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping
     public ResponseEntity<List<ActivityGetDto>> get(){
         return ResponseEntity.ok(activityService.get());
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")
     @GetMapping("/{name}")
     public ResponseEntity<ActivityGetDto> get(@PathVariable String name){
         return ResponseEntity.ok(activityService.get(name));

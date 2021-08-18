@@ -20,7 +20,7 @@ public class Activity {
     //@DurationUnit(ChronoUnit.MINUTES)
     //@DurationFormat(DurationStyle.detect(nanana))
     @Column(nullable = false)
-    private Duration duration;
+    private Duration duration = Duration.ofMinutes(0);
 
     @Column(nullable = false)
     private Double price;
