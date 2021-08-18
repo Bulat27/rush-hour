@@ -18,9 +18,9 @@ public class ActivityPostDtoDeserializer extends JsonDeserializer<ActivityPostDt
     public ActivityPostDto deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException, JsonProcessingException {
         JsonNode node = jsonParser.getCodec().readTree(jsonParser);
 
-        String name =  (node.get("name").textValue());
-        Duration duration = Duration.ofMinutes((node.get("duration").longValue()));
-        Double price = (node.get("price").doubleValue());
+        String name = node.get("name") != null ? (node.get("name").textValue()) : null;
+        Duration duration = node.get("duration") != null ? Duration.ofMinutes((node.get("duration").longValue())) : null;
+        Double price = node.get("price") != null ? (node.get("price").doubleValue()) : null;
 
         return new ActivityPostDto(name, duration, price);
     }

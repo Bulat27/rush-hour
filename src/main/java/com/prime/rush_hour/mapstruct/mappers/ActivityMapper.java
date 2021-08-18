@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-//TODO: Mozda ce biti potrebni jos neki argumenti ovde, vidi to kad dodje vrijeme.
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ActivityMapper {
     ActivityGetDto activityToActivityGetDto(Activity activity);

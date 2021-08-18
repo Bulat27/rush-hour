@@ -33,7 +33,6 @@ public class ActivityController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping
-    //TODO: Vidi dal je potrebna jos neka validacija
     public ResponseEntity<ActivityGetDto> create (@RequestBody @Valid ActivityPostDto activityPostDto){
         return ResponseEntity.ok(activityService.create(activityPostDto));
     }

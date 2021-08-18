@@ -16,7 +16,6 @@ public class ActivityPostDto {
     @GeneratedValue
     private Integer id;
 
-    //TODO : Vidi jos za ove validacije. Tipa max cena, max trajanje itd.
     @NotBlank
     private String name;
 

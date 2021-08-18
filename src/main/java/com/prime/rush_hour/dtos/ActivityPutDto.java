@@ -8,8 +8,6 @@ import java.time.Duration;
 @JsonDeserialize(using = ActivityPutDtoDeserializer.class)
 public class ActivityPutDto {
 
-    //TODO: Vidi da li su potrebne jos neke validacije
-    //@NotBlank
     private String name;
     private Duration duration;
     private Double price;
