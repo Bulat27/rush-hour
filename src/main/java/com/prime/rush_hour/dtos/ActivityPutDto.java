@@ -1,7 +1,7 @@
 package com.prime.rush_hour.dtos;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import serialization.ActivityPutDtoDeserializer;
+import com.prime.rush_hour.serialization.ActivityPutDtoDeserializer;
 
 import java.time.Duration;
 

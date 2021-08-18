@@ -1,4 +1,4 @@
-package serialization;
+package com.prime.rush_hour.serialization;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;

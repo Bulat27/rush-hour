@@ -1,7 +1,7 @@
 package com.prime.rush_hour.dtos;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import serialization.ActivityPostDtoDeserializer;
+import com.prime.rush_hour.serialization.ActivityPostDtoDeserializer;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
