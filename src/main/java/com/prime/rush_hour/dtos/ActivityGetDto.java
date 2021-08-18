@@ -6,7 +6,7 @@ public class ActivityGetDto {
 
     private String name;
     private Duration duration;
-    private Double price;
+    private double price;
 
 
     public String getName() {
@@ -25,11 +25,11 @@ public class ActivityGetDto {
         this.duration = duration;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

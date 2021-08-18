@@ -9,7 +9,6 @@ import java.time.Duration;
 @Entity(name = "activities")
 public class Activity {
 
-
     @Id
     @GeneratedValue
     private Integer id;
@@ -17,10 +16,8 @@ public class Activity {
     @Column(nullable = false, unique = true)
     private String name;
 
-    //@DurationUnit(ChronoUnit.MINUTES)
-    //@DurationFormat(DurationStyle.detect(nanana))
     @Column(nullable = false)
-    private Duration duration = Duration.ofMinutes(0);
+    private Duration duration;
 
     @Column(nullable = false)
     private Double price;
