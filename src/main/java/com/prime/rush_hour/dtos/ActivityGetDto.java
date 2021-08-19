@@ -8,6 +8,14 @@ public class ActivityGetDto {
     private Duration duration;
     private double price;
 
+    public ActivityGetDto() {
+    }
+
+    public ActivityGetDto(String name, Duration duration, double price) {
+        this.name = name;
+        this.duration = duration;
+        this.price = price;
+    }
 
     public String getName() {
         return name;
