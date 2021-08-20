@@ -79,7 +79,7 @@ class UserServiceLayerTest {
         UserGetDto fetchedUser = userService.get(predefinedUser.getEmail());
         assertThat(fetchedUser).usingRecursiveComparison().isEqualTo(predefinedUser);
     }
-    //TODO: VIDI ZA OVO! (I U ACTIVITIJU)
+
     @Test
     void willThrowWhenUserDoesntExist(){
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
@@ -95,7 +95,6 @@ class UserServiceLayerTest {
 
         when(roleRepository.findByName(ApplicationUserRole.USER)).thenReturn(Optional.of(new Role(ApplicationUserRole.USER)));
 
-        //TODO: Napravi da bude opstije
         when(passwordEncoder.encode(password)).thenReturn(password);
         userService.create(userWithoutRole, roleTypes);
 

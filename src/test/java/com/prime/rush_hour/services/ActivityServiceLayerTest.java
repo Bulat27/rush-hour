@@ -24,7 +24,6 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
-//TODO: Work on naming. Predefined, fetched...
 @ExtendWith(MockitoExtension.class)
 class ActivityServiceLayerTest {
 
@@ -37,20 +36,6 @@ class ActivityServiceLayerTest {
     @InjectMocks
     private ActivityServiceImpl activityService;
 
-//    @BeforeAll
-//    public void init(){
-//        List<Activity> activityList = new ArrayList<>();
-//
-//        Activity a1 = new Activity(1, "Trcanje", Duration.of(50, ChronoUnit.MINUTES), 25.4);
-//        Activity a2 = new Activity(2, "Skakanje", Duration.of(40, ChronoUnit.MINUTES), 25.7);
-//        Activity a3 = new Activity(3, "Preticanje", Duration.of(30, ChronoUnit.MINUTES), 25.8);
-//
-//        activityList.add(a1);
-//        activityList.add(a2);
-//        activityList.add(a3);
-//
-//        when(activityRepository.findAll()).thenReturn(activityList);
-//    }
 
     @Test
     void canGetAllActivities(){
@@ -69,9 +54,6 @@ class ActivityServiceLayerTest {
         List<ActivityGetDto> fetchedList = activityService.get();
 
         assertThat(activityMapper.activitiesToActivityGetDtos(predefinedList)).usingRecursiveComparison().isEqualTo(fetchedList);
-//        assertThat(activityList.size()).isEqualTo(actList.size());
-//        verify(activityRepository, times(1)).findAll();
-//        verify(activityMapper, times(1)).activitiesToActivityGetDtos(activityList);
     }
 
     @Test
@@ -83,16 +65,13 @@ class ActivityServiceLayerTest {
         ActivityGetDto activityGetDto = activityService.get(a1.getName());
 
         assertThat(activityGetDto).usingRecursiveComparison().isEqualTo(activityMapper.activityToActivityGetDto(a1));
-//        verify(activityRepository, times(1)).findByName(a1.getName());
-//        verify(activityMapper, times(1)).activityToActivityGetDto(a1);
     }
 
-    //TODO: Promeni i ovde u fiksni String kao i u Service-u
     @Test
     void willThrowWhenNameDoesntExist(){
         when(activityRepository.findByName(anyString())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.get(anyString()))
+        assertThatThrownBy(() -> activityService.get("Haircut"))
                 .isInstanceOf(ActivityNotFoundException.class);
     }
 
@@ -161,5 +140,4 @@ class ActivityServiceLayerTest {
 
         assertThatThrownBy(() -> activityService.delete(name)).isInstanceOf(ActivityNotFoundException.class);
     }
-
 }
