@@ -53,7 +53,7 @@ class UserServiceLayerTest {
     private UserServiceImpl userService;
 
     @Test
-    void canGetAllUsers(){
+    void getAllShouldReturnAllUsers(){
         List<User> predefinedList = new ArrayList<>();
 
         User u1 = new User(1, "Nikola", "Bulat", "bulatn@gmail.com", "123");
@@ -71,7 +71,7 @@ class UserServiceLayerTest {
     }
 
     @Test
-    void canGetUserByEmail(){
+    void getByEmailShouldReturnUserByEmail(){
         User predefinedUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com", "123");
 
         when(userRepository.findByEmail(predefinedUser.getEmail())).thenReturn(Optional.of(predefinedUser));
@@ -88,7 +88,7 @@ class UserServiceLayerTest {
     }
 
     @Test
-    void canAddUser(){
+    void createUserShouldAddUser(){
         String password = "123";
         UserPostDto userWithoutRole = new UserPostDto(1, "Nikola", "Bulat", "bulatn@gmail.com", password);
         List<ApplicationUserRole> roleTypes = List.of(ApplicationUserRole.USER);
@@ -119,55 +119,7 @@ class UserServiceLayerTest {
     }
 
     @Test
-    void canUpdateAllTheFieldsOfUserWithoutRoles(){
-        String password = "123";
-        User existingUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com","random");
-        UserPutDto newUser = new UserPutDto("Kevin", "Durant", "bulatn@gmail.com", password, null);
-
-        when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.of(existingUser));
-        when(passwordEncoder.encode(password)).thenReturn(password);
-        when(userRepository.save(existingUser)).thenReturn(existingUser);
-        when(initialAdminConfig.getEmail()).thenReturn("");
-
-        UserGetDto updatedUser = userService.update(newUser);
-
-        assertThat(existingUser.getPassword()).isEqualTo(newUser.getPassword());
-        assertThat(userMapper.userToUserGetDto(existingUser)).usingRecursiveComparison().isEqualTo(updatedUser);
-    }
-
-    @Test
-    void canUpdateSomeFieldsOfUserIncludingPasswordWithoutRoles(){
-        String password = "123";
-        User existingUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com","random");
-        UserPutDto newUser = new UserPutDto(null, null, "bulatn@gmail.com", password, null);
-
-        when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.of(existingUser));
-        when(passwordEncoder.encode(password)).thenReturn(password);
-        when(userRepository.save(existingUser)).thenReturn(existingUser);
-        when(initialAdminConfig.getEmail()).thenReturn("");
-
-        UserGetDto updatedUser = userService.update(newUser);
-
-        assertThat(existingUser.getPassword()).isEqualTo(newUser.getPassword());
-        assertThat(userMapper.userToUserGetDto(existingUser)).usingRecursiveComparison().isEqualTo(updatedUser);
-    }
-
-    @Test
-    void canUpdateSomeFieldsOfUserExcludingPasswordWithoutRoles(){
-        User existingUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com","random");
-        UserPutDto newUser = new UserPutDto("Kevin", null, "bulatn@gmail.com", null, null);
-
-        when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.of(existingUser));
-        when(userRepository.save(existingUser)).thenReturn(existingUser);
-        when(initialAdminConfig.getEmail()).thenReturn("");
-
-        UserGetDto updatedUser = userService.update(newUser);
-
-        assertThat(userMapper.userToUserGetDto(existingUser)).usingRecursiveComparison().isEqualTo(updatedUser);
-    }
-
-    @Test
-    void canUpdateUserWithRoles(){
+    void updateByNameShouldUpdateAllTheFieldsOfUser(){
         String password = "123";
         User existingUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com","random");
         existingUser.addRole(new Role(ApplicationUserRole.USER));
@@ -188,6 +140,38 @@ class UserServiceLayerTest {
     }
 
     @Test
+    void updateByNameShouldUpdateSomeFieldsOfUserIncludingPassword(){
+        String password = "123";
+        User existingUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com","random");
+        UserPutDto newUser = new UserPutDto(null, null, "bulatn@gmail.com", password, null);
+
+        when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.of(existingUser));
+        when(passwordEncoder.encode(password)).thenReturn(password);
+        when(userRepository.save(existingUser)).thenReturn(existingUser);
+        when(initialAdminConfig.getEmail()).thenReturn("");
+
+        UserGetDto updatedUser = userService.update(newUser);
+
+        assertThat(existingUser.getPassword()).isEqualTo(newUser.getPassword());
+        assertThat(userMapper.userToUserGetDto(existingUser)).usingRecursiveComparison().isEqualTo(updatedUser);
+    }
+
+    @Test
+    void updateByNameShouldUpdateSomeFieldsOfUserExcludingPassword(){
+        User existingUser = new User(1, "Nikola", "Bulat", "bulatn@gmail.com","random");
+        UserPutDto newUser = new UserPutDto("Kevin", null, "bulatn@gmail.com", null, null);
+
+        when(userRepository.findByEmail(newUser.getEmail())).thenReturn(Optional.of(existingUser));
+        when(userRepository.save(existingUser)).thenReturn(existingUser);
+        when(initialAdminConfig.getEmail()).thenReturn("");
+
+        UserGetDto updatedUser = userService.update(newUser);
+
+        assertThat(userMapper.userToUserGetDto(existingUser)).usingRecursiveComparison().isEqualTo(updatedUser);
+    }
+
+
+    @Test
     void willThrowWhenTryingToUpdateInitialAdmin(){
         String email = "bulatn@gmail.com";
         UserPutDto newUser = new UserPutDto("Kevin", "Durant", email, "123", null);
@@ -198,7 +182,7 @@ class UserServiceLayerTest {
     }
 
     @Test
-    void canDeleteByEmail(){
+    void deleteByEmailShouldDeleteUser(){
         String email = "bulatn@gmail.com";
         when(userRepository.existsByEmail(email)).thenReturn(true);
 
@@ -215,14 +199,4 @@ class UserServiceLayerTest {
 
         assertThatThrownBy(() -> userService.delete(email)).isInstanceOf(AdminCannotBeModifiedException.class);
     }
-
-//    @Test
-//    void canAddRoles(){
-//        User userWithoutRoles = new User(1, "Nikola", "Bulat", "bulatn@gmail.com", "123");
-//        User userWithRoles = new User(1, "Nikola", "Bulat", "bulatn@gmail.com", "123");
-//        userWithRoles.addRole(new Role(ApplicationUserRole.USER));
-//        userWithRoles.addRole(new Role(ApplicationUserRole.ADMIN));
-//
-//        userService.ad
-//    }
 }

@@ -38,7 +38,7 @@ class ActivityServiceLayerTest {
 
 
     @Test
-    void canGetAllActivities(){
+    void getAllShouldReturnAllActivities(){
         List<Activity> predefinedList = new ArrayList<>();
 
         Activity a1 = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
@@ -57,7 +57,7 @@ class ActivityServiceLayerTest {
     }
 
     @Test
-    void canGetActivityByName(){
+    void getByNameShouldReturnActivityByName(){
         Activity a1 = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
 
         when(activityRepository.findByName(a1.getName())).thenReturn(Optional.of(a1));
@@ -76,7 +76,7 @@ class ActivityServiceLayerTest {
     }
 
     @Test
-    void canAddActivity(){
+    void createActivityShouldAddActivity(){
         ActivityPostDto a1 = new ActivityPostDto(1, "Haircut", Duration.of(50, MINUTES), 25.4);
 
         activityService.create(a1);
@@ -98,7 +98,7 @@ class ActivityServiceLayerTest {
     }
 
     @Test
-    void canUpdateAllTheFieldsOfActivity(){
+    void updateByNameShouldUpdateAllTheFieldsOfTheActivity(){
         Activity existingActivity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
         when(activityRepository.findByName(existingActivity.getName())).thenReturn(Optional.of(existingActivity));
         when(activityRepository.save(existingActivity)).thenReturn(existingActivity);
@@ -111,7 +111,7 @@ class ActivityServiceLayerTest {
     }
 
     @Test
-    void canUpdateSomeFieldsOfActivity(){
+    void updateByNameShouldUpdateSomeFieldsOfTheActivity(){
         Activity existingActivity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
         when(activityRepository.findByName(existingActivity.getName())).thenReturn(Optional.of(existingActivity));
         when(activityRepository.save(existingActivity)).thenReturn(existingActivity);
@@ -124,7 +124,7 @@ class ActivityServiceLayerTest {
     }
 
     @Test
-    void canDeleteByName(){
+    void deleteByNameShouldDeleteActivity(){
         String name = "Haircut";
         when(activityRepository.existsByName(name)).thenReturn(true);
 
