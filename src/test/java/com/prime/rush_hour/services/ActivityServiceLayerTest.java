@@ -8,6 +8,8 @@ import com.prime.rush_hour.exception_handling.ActivityExistsException;
 import com.prime.rush_hour.exception_handling.ActivityNotFoundException;
 import com.prime.rush_hour.mapstruct.mappers.ActivityMapperImpl;
 import com.prime.rush_hour.repositories.ActivityRepository;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -36,16 +38,27 @@ class ActivityServiceLayerTest {
     @InjectMocks
     private ActivityServiceImpl activityService;
 
+    private Activity activity;
+    private static ActivityPostDto activityPostDto;
+
+    @BeforeEach
+    public void initBeforeEach(){
+        activity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
+    }
+
+    @BeforeAll
+    public static void initBeforeAll(){
+        activityPostDto = new ActivityPostDto(1, "Haircut", Duration.of(50, MINUTES), 25.4);
+    }
 
     @Test
     void getAllShouldReturnAllActivities(){
         List<Activity> predefinedList = new ArrayList<>();
 
-        Activity a1 = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
         Activity a2 = new Activity(2, "Shaving", Duration.of(40, MINUTES), 25.7);
         Activity a3 = new Activity(3, "Beard trimming", Duration.of(30, MINUTES), 25.8);
 
-        predefinedList.add(a1);
+        predefinedList.add(activity);
         predefinedList.add(a2);
         predefinedList.add(a3);
 
@@ -58,13 +71,11 @@ class ActivityServiceLayerTest {
 
     @Test
     void getByNameShouldReturnActivityByName(){
-        Activity a1 = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
+        when(activityRepository.findByName(activity.getName())).thenReturn(Optional.of(activity));
 
-        when(activityRepository.findByName(a1.getName())).thenReturn(Optional.of(a1));
+        ActivityGetDto activityGetDto = activityService.get(activity.getName());
 
-        ActivityGetDto activityGetDto = activityService.get(a1.getName());
-
-        assertThat(activityGetDto).usingRecursiveComparison().isEqualTo(activityMapper.activityToActivityGetDto(a1));
+        assertThat(activityGetDto).usingRecursiveComparison().isEqualTo(activityMapper.activityToActivityGetDto(activity));
     }
 
     @Test
@@ -77,50 +88,44 @@ class ActivityServiceLayerTest {
 
     @Test
     void createActivityShouldAddActivity(){
-        ActivityPostDto a1 = new ActivityPostDto(1, "Haircut", Duration.of(50, MINUTES), 25.4);
-
-        activityService.create(a1);
+        activityService.create(activityPostDto);
 
         ArgumentCaptor<Activity> activityArgumentCaptor = ArgumentCaptor.forClass(Activity.class);
         verify(activityRepository).save(activityArgumentCaptor.capture());
         Activity capturedActivity = activityArgumentCaptor.getValue();
 
-        assertThat(activityMapper.activityPostDtoToActivity(a1)).usingRecursiveComparison().isEqualTo(capturedActivity);
+        assertThat(activityMapper.activityPostDtoToActivity(activityPostDto)).usingRecursiveComparison().isEqualTo(capturedActivity);
     }
 
     @Test
     void willThrowWhenNameAlreadyExists(){
-        ActivityPostDto a1 = new ActivityPostDto(1, "Haircut", Duration.of(50, MINUTES), 25.4);
-
         when(activityRepository.existsByName(anyString())).thenReturn(true);
 
-        assertThatThrownBy(() -> activityService.create(a1)).isInstanceOf(ActivityExistsException.class);
+        assertThatThrownBy(() -> activityService.create(activityPostDto)).isInstanceOf(ActivityExistsException.class);
     }
 
     @Test
     void updateByNameShouldUpdateAllTheFieldsOfTheActivity(){
-        Activity existingActivity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
-        when(activityRepository.findByName(existingActivity.getName())).thenReturn(Optional.of(existingActivity));
-        when(activityRepository.save(existingActivity)).thenReturn(existingActivity);
+        when(activityRepository.findByName(activity.getName())).thenReturn(Optional.of(activity));
+        when(activityRepository.save(activity)).thenReturn(activity);
 
         ActivityPutDto newActivity = new ActivityPutDto("Shaving", Duration.of(40, MINUTES), 25.7);
 
-        ActivityGetDto updatedActivity = activityService.update(existingActivity.getName(), newActivity);
+        ActivityGetDto updatedActivity = activityService.update(activity.getName(), newActivity);
 
-        assertThat(updatedActivity).usingRecursiveComparison().isEqualTo(existingActivity);
+        assertThat(updatedActivity).usingRecursiveComparison().isEqualTo(activity);
     }
 
     @Test
     void updateByNameShouldUpdateSomeFieldsOfTheActivity(){
-        Activity existingActivity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
-        when(activityRepository.findByName(existingActivity.getName())).thenReturn(Optional.of(existingActivity));
-        when(activityRepository.save(existingActivity)).thenReturn(existingActivity);
+        when(activityRepository.findByName(activity.getName())).thenReturn(Optional.of(activity));
+        when(activityRepository.save(activity)).thenReturn(activity);
 
         ActivityPutDto newActivity = new ActivityPutDto(null, Duration.of(40, MINUTES), 25.7);
 
-        ActivityGetDto updatedActivity = activityService.update(existingActivity.getName(), newActivity);
+        ActivityGetDto updatedActivity = activityService.update(activity.getName(), newActivity);
 
-        assertThat(updatedActivity).usingRecursiveComparison().isEqualTo(existingActivity);
+        assertThat(updatedActivity).usingRecursiveComparison().isEqualTo(activity);
     }
 
     @Test
