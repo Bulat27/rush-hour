@@ -24,6 +24,7 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
+//TODO: Work on naming. Predefined, fetched...
 @ExtendWith(MockitoExtension.class)
 class ActivityServiceLayerTest {
 
@@ -86,6 +87,7 @@ class ActivityServiceLayerTest {
 //        verify(activityMapper, times(1)).activityToActivityGetDto(a1);
     }
 
+    //TODO: Promeni i ovde u fiksni String kao i u Service-u
     @Test
     void willThrowWhenNameDoesntExist(){
         when(activityRepository.findByName(anyString())).thenReturn(Optional.empty());
