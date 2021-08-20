@@ -19,6 +19,16 @@ public class UserPutDto {
     private String password;
     private List<ApplicationUserRole> roles;
 
+    public UserPutDto() {
+    }
+
+    public UserPutDto(String firstName, String lastName, String email, String password, List<ApplicationUserRole> roles) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
 
     public String getFirstName() {
         return firstName;

@@ -119,12 +119,25 @@ class ActivityServiceLayerTest {
     }
 
     @Test
-    void canUpdateActivity(){
+    void canUpdateAllTheFieldsOfActivity(){
         Activity existingActivity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
         when(activityRepository.findByName(existingActivity.getName())).thenReturn(Optional.of(existingActivity));
         when(activityRepository.save(existingActivity)).thenReturn(existingActivity);
 
         ActivityPutDto newActivity = new ActivityPutDto("Shaving", Duration.of(40, MINUTES), 25.7);
+
+        ActivityGetDto updatedActivity = activityService.update(existingActivity.getName(), newActivity);
+
+        assertThat(updatedActivity).usingRecursiveComparison().isEqualTo(existingActivity);
+    }
+
+    @Test
+    void canUpdateSomeFieldsOfActivity(){
+        Activity existingActivity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
+        when(activityRepository.findByName(existingActivity.getName())).thenReturn(Optional.of(existingActivity));
+        when(activityRepository.save(existingActivity)).thenReturn(existingActivity);
+
+        ActivityPutDto newActivity = new ActivityPutDto(null, Duration.of(40, MINUTES), 25.7);
 
         ActivityGetDto updatedActivity = activityService.update(existingActivity.getName(), newActivity);
 
