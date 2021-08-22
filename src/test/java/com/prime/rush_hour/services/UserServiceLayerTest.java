@@ -13,6 +13,7 @@ import com.prime.rush_hour.repositories.RoleRepository;
 import com.prime.rush_hour.repositories.UserRepository;
 import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 import com.prime.rush_hour.security.configuration.InitialAdminConfiguration;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -98,7 +99,9 @@ class UserServiceLayerTest {
     void willThrowWhenUserDoesntExist(){
         when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> userService.get(EMAIL)).isInstanceOf(UserNotFoundException.class);
+        Assertions.assertThrows(UserNotFoundException.class, () -> {
+            userService.get(EMAIL);
+        });
     }
 
     @Test
@@ -125,7 +128,9 @@ class UserServiceLayerTest {
     void willThrowWhenUserAlreadyExists(){
         when(userRepository.existsByEmail(anyString())).thenReturn(true);
 
-        assertThatThrownBy(() -> userService.create(userPostDto, null)).isInstanceOf(EmailExistsException.class);
+        Assertions.assertThrows(EmailExistsException.class, () -> {
+            userService.create(userPostDto, null);
+        });
     }
 
     @Test
@@ -182,7 +187,9 @@ class UserServiceLayerTest {
 
         when(initialAdminConfig.getEmail()).thenReturn(EMAIL);
 
-        assertThatThrownBy(() -> userService.update(newUser)).isInstanceOf(AdminCannotBeModifiedException.class);
+        Assertions.assertThrows(AdminCannotBeModifiedException.class, () -> {
+            userService.update(newUser);
+        });
     }
 
     @Test
@@ -198,6 +205,8 @@ class UserServiceLayerTest {
     void willThrowWhenTryingToDeleteInitialAdmin(){
         when(initialAdminConfig.getEmail()).thenReturn(EMAIL);
 
-        assertThatThrownBy(() -> userService.delete(EMAIL)).isInstanceOf(AdminCannotBeModifiedException.class);
+        Assertions.assertThrows(AdminCannotBeModifiedException.class, () -> {
+            userService.delete(EMAIL);
+        });
     }
 }

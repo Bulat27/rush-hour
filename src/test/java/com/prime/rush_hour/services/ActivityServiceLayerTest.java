@@ -8,6 +8,7 @@ import com.prime.rush_hour.exception_handling.ActivityExistsException;
 import com.prime.rush_hour.exception_handling.ActivityNotFoundException;
 import com.prime.rush_hour.mapstruct.mappers.ActivityMapperImpl;
 import com.prime.rush_hour.repositories.ActivityRepository;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static java.time.temporal.ChronoUnit.*;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
@@ -40,15 +40,16 @@ class ActivityServiceLayerTest {
 
     private Activity activity;
     private static ActivityPostDto activityPostDto;
+    private static final String ACTIVITY_NAME = "Haircut";
 
     @BeforeEach
     public void initBeforeEach(){
-        activity = new Activity(1, "Haircut", Duration.of(50, MINUTES), 25.4);
+        activity = new Activity(1, ACTIVITY_NAME, Duration.of(50, MINUTES), 25.4);
     }
 
     @BeforeAll
     public static void initBeforeAll(){
-        activityPostDto = new ActivityPostDto(1, "Haircut", Duration.of(50, MINUTES), 25.4);
+        activityPostDto = new ActivityPostDto(1, ACTIVITY_NAME, Duration.of(50, MINUTES), 25.4);
     }
 
     @Test
@@ -82,8 +83,9 @@ class ActivityServiceLayerTest {
     void willThrowWhenNameDoesntExist(){
         when(activityRepository.findByName(anyString())).thenReturn(Optional.empty());
 
-        assertThatThrownBy(() -> activityService.get("Haircut"))
-                .isInstanceOf(ActivityNotFoundException.class);
+        Assertions.assertThrows(ActivityNotFoundException.class, () -> {
+            activityService.get(ACTIVITY_NAME);
+        });
     }
 
     @Test
@@ -101,7 +103,9 @@ class ActivityServiceLayerTest {
     void willThrowWhenNameAlreadyExists(){
         when(activityRepository.existsByName(anyString())).thenReturn(true);
 
-        assertThatThrownBy(() -> activityService.create(activityPostDto)).isInstanceOf(ActivityExistsException.class);
+        Assertions.assertThrows(ActivityExistsException.class, () -> {
+           activityService.create(activityPostDto);
+        });
     }
 
     @Test
@@ -130,19 +134,19 @@ class ActivityServiceLayerTest {
 
     @Test
     void deleteByNameShouldDeleteActivity(){
-        String name = "Haircut";
-        when(activityRepository.existsByName(name)).thenReturn(true);
+        when(activityRepository.existsByName(ACTIVITY_NAME)).thenReturn(true);
 
-        activityService.delete(name);
+        activityService.delete(ACTIVITY_NAME);
 
-        verify(activityRepository, times(1)).deleteByName(name);
+        verify(activityRepository, times(1)).deleteByName(ACTIVITY_NAME);
     }
 
     @Test
     void willThrowWhenDeleteActivityNotFound(){
-        String name = "Haircut";
-        when(activityRepository.existsByName(name)).thenReturn(false);
-
-        assertThatThrownBy(() -> activityService.delete(name)).isInstanceOf(ActivityNotFoundException.class);
+        when(activityRepository.existsByName(ACTIVITY_NAME)).thenReturn(false);
+        
+        Assertions.assertThrows(ActivityNotFoundException.class, () -> {
+            activityService.delete(ACTIVITY_NAME);
+        });
     }
 }
