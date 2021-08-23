@@ -22,6 +22,16 @@ public class Activity {
     @Column(nullable = false)
     private Double price;
 
+    public Activity(Integer id, String name, Duration duration, Double price) {
+        this.id = id;
+        this.name = name;
+        this.duration = duration;
+        this.price = price;
+    }
+
+    public Activity() {
+    }
+
     public Integer getId() {
         return id;
     }

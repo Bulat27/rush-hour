@@ -3,6 +3,7 @@ package com.prime.rush_hour.entities;
 import com.prime.rush_hour.security.authorization.ApplicationUserRole;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "roles")

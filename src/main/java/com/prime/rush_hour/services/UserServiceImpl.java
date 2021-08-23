@@ -60,8 +60,7 @@ public class UserServiceImpl implements UserService{
         userMapper.update(userPutDto, user);
         if(userPutDto.getPassword() != null) encodePassword(user);
         addRoles(user, userPutDto.getRoles());
-        userRepository.save(user);
-        return userMapper.userToUserGetDto(user);
+        return userMapper.userToUserGetDto(userRepository.save(user));
     }
 
     @Override

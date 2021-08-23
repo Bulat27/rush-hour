@@ -31,6 +31,13 @@ public class ActivityPostDto {
         this.price = price;
     }
 
+    public ActivityPostDto(Integer id, String name, Duration duration, Double price) {
+        this.id = id;
+        this.name = name;
+        this.duration = duration;
+        this.price = price;
+    }
+
     public ActivityPostDto() {
     }
 
