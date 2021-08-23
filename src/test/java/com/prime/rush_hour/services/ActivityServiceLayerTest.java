@@ -92,11 +92,7 @@ class ActivityServiceLayerTest {
     void createActivityShouldAddActivity(){
         activityService.create(activityPostDto);
 
-        ArgumentCaptor<Activity> activityArgumentCaptor = ArgumentCaptor.forClass(Activity.class);
-        verify(activityRepository).save(activityArgumentCaptor.capture());
-        Activity capturedActivity = activityArgumentCaptor.getValue();
-
-        assertThat(activityMapper.activityPostDtoToActivity(activityPostDto)).usingRecursiveComparison().isEqualTo(capturedActivity);
+        verify(activityRepository, times(1)).save(any(Activity.class));
     }
 
     @Test
